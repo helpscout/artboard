@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from '@helpscout/fancy'
+import ResizeObserver from 'resize-observer-polyfill'
 import GuideContext from '../GuideContext'
 import {rgba} from 'polished'
 import {getPreparedProps} from '../utils'
@@ -11,14 +12,45 @@ class Guide extends React.PureComponent {
     height: '100%',
     width: 25,
     position: 'absolute',
-    top: 0,
-    left: 0,
     showValues: true,
     showGuide: true,
   }
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      width: props.width,
+      height: props.height,
+    }
+
+    this.resizeObserver = new ResizeObserver(this.resizeHandler)
+  }
+
+  componentDidMount() {
+    this.resizeObserver.observe(this.node)
+  }
+
+  componentWillUnmount() {
+    this.resizeObserver.unobserve(this.node)
+  }
+
+  resizeHandler = entries => {
+    for (const entry of entries) {
+      const {width, height} = entry.contentRect
+
+      this.setState({
+        height: Math.round(height),
+        width: Math.round(width),
+      })
+    }
+  }
+
+  setNodeRef = node => (this.node = node)
+
   render() {
     const {children, showGuide, ...rest} = this.props
+    const {height, width} = this.state
 
     if (!showGuide) return null
 
@@ -26,10 +58,10 @@ class Guide extends React.PureComponent {
       <GuideContext.Consumer>
         {contextProps => {
           const mergedProps = getPreparedProps({...rest, ...contextProps})
-          const {height, showValues, width} = mergedProps
+          const {showValues} = mergedProps
 
           return (
-            <GuideUI {...mergedProps}>
+            <GuideUI {...mergedProps} innerRef={this.setNodeRef}>
               {showValues && (
                 <div>
                   <HeightUI>
@@ -69,7 +101,6 @@ const HeightUI = styled('div')`
 
 const HeightTextUI = styled('div')`
   transform: rotate(-90deg);
-  transform-origin: left top 0;
 `
 
 const WidthUI = styled('div')`

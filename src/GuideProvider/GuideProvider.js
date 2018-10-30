@@ -6,7 +6,20 @@ class GuideProvider extends React.PureComponent {
     const {children, ...rest} = this.props
 
     return (
-      <GuideContext.Provider value={rest}>{children}</GuideContext.Provider>
+      <GuideContext.Consumer>
+        {contextProps => {
+          const mergedProps = {
+            ...contextProps,
+            ...rest,
+          }
+
+          return (
+            <GuideContext.Provider value={mergedProps}>
+              {children}
+            </GuideContext.Provider>
+          )
+        }}
+      </GuideContext.Consumer>
     )
   }
 }

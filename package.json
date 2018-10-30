@@ -55,12 +55,14 @@
     "nyc": "13.0.0",
     "react": "^15",
     "react-dom": "^15",
+    "react-resizable": "^1.7.5",
     "react-scripts": "1.1.4",
     "react-test-renderer": "16.2.0"
   },
   "dependencies": {
     "@helpscout/fancy": "^2.1.1",
     "@helpscout/react-utils": "^1.0.1",
-    "polished": "^2.3.0"
+    "polished": "^2.3.0",
+    "resize-observer-polyfill": "^1.5.0"
   }
 }
