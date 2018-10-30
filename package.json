@@ -1,0 +1,66 @@
+{
+  "name": "@helscout/hsds-guides",
+  "version": "0.0.1",
+  "description": "Visual guides for UI development and design",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "zero build",
+    "bundle": "zero build --bundle",
+    "lint": "zero lint",
+    "dev": "zero test --watchAll",
+    "test": "zero test --coverage",
+    "test:update": "npm test -- --updateSnapshot --coverage",
+    "validate": "zero validate",
+    "setup": "npm install && npm run validate -s",
+    "precommit": "zero precommit",
+    "clean": "rm -rf dist lib",
+    "coverage": "nyc report --temp-directory=coverage --reporter=text-lcov | coveralls",
+    "release": "np --no-yarn --no-publish",
+    "version": "npm run build",
+    "postversion": "npm publish",
+    "start": "npm run storybook",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "prettier": "prettier \"src/**/*.js\" --write",
+    "pretty": "npm run prettier"
+  },
+  "author": "Jon Quach <hello@jonquach.com> (https://jonquach.com)",
+  "license": "MIT",
+  "keywords": [
+    "components",
+    "guidelines",
+    "guides",
+    "gutter",
+    "helpscout",
+    "keyline",
+    "react"
+  ],
+  "engines": {
+    "node": ">=8"
+  },
+  "peerDependencies": {
+    "react": "^16 || ^15"
+  },
+  "devDependencies": {
+    "@helpscout/blue": "^1.9.3",
+    "@helpscout/zero": "^0.0.9",
+    "@storybook/addon-actions": "^3.4.3",
+    "@storybook/addon-links": "^3.4.3",
+    "@storybook/addons": "^3.4.3",
+    "@storybook/cli": "^3.4.11",
+    "@storybook/react": "^3.4.3",
+    "coveralls": "3.0.0",
+    "enzyme": "2.9.1",
+    "np": "2.20.1",
+    "nyc": "13.0.0",
+    "react": "^15",
+    "react-dom": "^15",
+    "react-scripts": "1.1.4",
+    "react-test-renderer": "16.2.0"
+  },
+  "dependencies": {
+    "@helpscout/fancy": "^2.1.1",
+    "@helpscout/react-utils": "^1.0.1",
+    "polished": "^2.3.0"
+  }
+}
