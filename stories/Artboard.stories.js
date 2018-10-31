@@ -51,7 +51,7 @@ stories.add('zoomLevel', () => (
   </Artboard>
 ))
 
-stories.add('Guides', () => (
+stories.add('Guides (Components)', () => (
   <Artboard
     withResponsiveWidth
     guides={[
@@ -69,7 +69,41 @@ stories.add('Guides', () => (
   </Artboard>
 ))
 
-stories.add('Without Crosshar', () => (
+stories.add('Guides (Objects)', () => (
+  <Artboard
+    withResponsiveWidth
+    guides={[
+      {height: '100%', left: 15, width: 10},
+      {height: '100%', right: 15, width: 10},
+    ]}
+  >
+    <div style={{background: '#eee', textAlign: 'center'}}>
+      <Button version={2} kind="primary" size="lg">
+        Button
+      </Button>
+    </div>
+  </Artboard>
+))
+
+stories.add('Guides (Component + Objects)', () => (
+  <Artboard
+    withResponsiveWidth
+    guides={[
+      <Guide height="20px" top="15px" width="100%" />,
+      <Guide height="20px" bottom="15px" width="100%" />,
+      {height: '100%', left: 15, width: 10},
+      {height: '100%', right: 15, width: 10},
+    ]}
+  >
+    <div style={{background: '#eee', textAlign: 'center'}}>
+      <Button version={2} kind="primary" size="lg">
+        Button
+      </Button>
+    </div>
+  </Artboard>
+))
+
+stories.add('Without Crosshair', () => (
   <Artboard
     withResponsiveWidth
     withCrosshair={false}

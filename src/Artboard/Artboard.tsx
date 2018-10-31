@@ -276,8 +276,20 @@ export class Artboard extends React.Component<Props, State> {
 
   renderGuides = () => {
     const {guides, withCrosshair} = this.props
+    let guidesMarkup = guides
 
-    console.log(withCrosshair)
+    if (Array.isArray(guides)) {
+      guidesMarkup = guides.map((Item, index) => {
+        const key = `guide-${index}`
+
+        if (React.isValidElement(Item)) {
+          return React.cloneElement(Item, {key})
+        }
+
+        return <Guide {...Item} key={key} />
+      })
+    }
+
     return (
       <GuideContainer
         position="absolute"
@@ -287,10 +299,22 @@ export class Artboard extends React.Component<Props, State> {
         height="100%"
         zIndex={999999}
       >
-        {guides}
+        {guidesMarkup}
         {withCrosshair && [
-          <Guide top="50%" width="100%" height={1} showValues={false} />,
-          <Guide left="50%" height="100%" width={1} showValues={false} />,
+          <Guide
+            top="50%"
+            width="100%"
+            height={1}
+            showValues={false}
+            key="cross1"
+          />,
+          <Guide
+            left="50%"
+            height="100%"
+            width={1}
+            showValues={false}
+            key="cross2"
+          />,
         ]}
       </GuideContainer>
     )
