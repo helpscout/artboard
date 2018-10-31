@@ -1,6 +1,11 @@
 type CSSPropValue = number | string
 type CSSNumberValue = string
 
+export const Keys = {
+  Z: 90,
+  SPACE: 32,
+}
+
 export function noop() {
   return undefined
 }
