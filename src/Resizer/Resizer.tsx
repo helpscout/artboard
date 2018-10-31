@@ -20,6 +20,8 @@ export class Resizer extends React.PureComponent<any> {
       maxHeight,
       width: widthProp,
       height: heightProp,
+      withResponsiveHeight,
+      withResponsiveWidth,
       ...rest
     } = this.props
 
