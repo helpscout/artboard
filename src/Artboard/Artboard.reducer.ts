@@ -31,12 +31,12 @@ const reducer = (state: State = initialState, action: Action) => {
 
     case ActionTypes.ZOOM_IN:
       return {
-        zoomLevel: state.zoomLevel + 0.25,
+        zoomLevel: state.zoomLevel * 2,
       }
 
     case ActionTypes.ZOOM_OUT:
       return {
-        zoomLevel: state.zoomLevel - 0.25,
+        zoomLevel: state.zoomLevel / 2,
       }
 
     case ActionTypes.MOVE_START:
