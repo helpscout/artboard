@@ -1,6 +1,7 @@
 # 🖼 Artboard
 
 [![Build Status](https://travis-ci.org/helpscout/artboard.svg?branch=master)](https://travis-ci.org/helpscout/artboard)
+[![npm version](https://badge.fury.io/js/%40helpscout%2Fartboard.svg)](https://badge.fury.io/js/%40helpscout%2Fartboard)
 
 > A tool kit for React UI development and design
 
