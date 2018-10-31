@@ -1,4 +1,4 @@
-# 📏 HSDS: UI DevKit
+# 🖲 HSDS: UI DevKit
 
 > A tool kit for React UI development and design
 
