@@ -4,7 +4,7 @@
 
 > A tool kit for React UI development and design
 
-![Guides Demo](./images/guides-demo.gif)
+![Artboard screenshot](./images/artboard.jpg)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
