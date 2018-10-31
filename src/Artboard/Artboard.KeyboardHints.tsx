@@ -41,7 +41,6 @@ const KeyboardHintsActionsUI = styled('div')`
   display: flex;
   justify-content: center;
   margin-bottom: 5px;
-  pointer-events: all;
 
   * {
     margin: 0 5px;
