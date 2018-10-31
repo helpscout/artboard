@@ -2,6 +2,8 @@ export interface Props {
   __debug: boolean
   alignHorizontally: 'left' | 'center' | 'right'
   alignVertically: 'top' | 'middle' | 'bottom'
+  defaultHeight: number
+  defaultWidth: number
   darkMode: boolean
   height?: number
   width?: number

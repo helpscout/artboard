@@ -6,6 +6,8 @@ import {cx} from '../utils'
 export class Resizer extends React.PureComponent<any> {
   getResizableProps = () => {
     const {
+      defaultHeight,
+      defaultWidth,
       children,
       minWidth,
       minHeight,
@@ -25,8 +27,8 @@ export class Resizer extends React.PureComponent<any> {
     const minConstraints = [minWidthConstraint, minHeightConstraint]
     const maxConstraints = [maxWidthConstraint, maxHeightConstraint]
 
-    const width = widthProp || minWidth
-    const height = heightProp || minHeight
+    const width = widthProp || minWidth || defaultWidth
+    const height = heightProp || minHeight || defaultHeight
 
     return {
       ...rest,

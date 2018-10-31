@@ -26,6 +26,8 @@ export class Artboard extends React.Component<Props, State> {
     alignHorizontally: 'center',
     alignVertically: 'center',
     darkMode: false,
+    defaultHeight: 400,
+    defaultWidth: 400,
   }
 
   state = initialState
@@ -193,9 +195,20 @@ export class Artboard extends React.Component<Props, State> {
   }
 
   getResizerProps = () => {
-    const {height, width, minWidth, minHeight, maxWidth, maxHeight} = this.props
+    const {
+      defaultWidth,
+      defaultHeight,
+      height,
+      width,
+      minWidth,
+      minHeight,
+      maxWidth,
+      maxHeight,
+    } = this.props
 
     return {
+      defaultWidth,
+      defaultHeight,
       height,
       width,
       minWidth,
