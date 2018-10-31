@@ -16,3 +16,7 @@ export function getPreparedProps(props: Object): Object {
     pointerEvents: 'none',
   }
 }
+
+export function cx(className: string): string {
+  return `HSDSUIDevKit-${className}`
+}

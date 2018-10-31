@@ -1,9 +1,10 @@
 import * as React from 'react'
 import styled from '@helpscout/fancy'
+import classNames from '@helpscout/react-utils/dist/classNames'
 import ResizeObserver from 'resize-observer-polyfill'
 import GuideContext from '../GuideContext'
 import {rgba} from 'polished'
-import {getPreparedProps} from '../utils'
+import {cx, getPreparedProps} from '../utils'
 
 type Observable = {
   observe: (node: HTMLElement) => void
@@ -62,7 +63,7 @@ class Guide extends React.PureComponent<any, State> {
   setNodeRef = node => (this.node = node)
 
   render() {
-    const {children, showGuide, ...rest} = this.props
+    const {className, children, showGuide, ...rest} = this.props
     const {height, width} = this.state
 
     if (!showGuide) return null
@@ -75,13 +76,17 @@ class Guide extends React.PureComponent<any, State> {
           const {showValues} = mergedProps
 
           return (
-            <GuideUI {...mergedProps} innerRef={this.setNodeRef}>
+            <GuideUI
+              {...mergedProps}
+              innerRef={this.setNodeRef}
+              className={classNames(cx('Guide'), className)}
+            >
               {showValues && (
-                <div>
-                  <HeightUI>
+                <div className={cx('Guide__sizeWrapper')}>
+                  <HeightUI className={cx('Guide__height')}>
                     <HeightTextUI>{height}</HeightTextUI>
                   </HeightUI>
-                  <WidthUI>{width}</WidthUI>
+                  <WidthUI className={cx('Guide__width')}>{width}</WidthUI>
                 </div>
               )}
             </GuideUI>
@@ -100,6 +105,9 @@ const GuideUI = styled('div')(({children, ...props}) => ({
   fontSize: 8,
   lineHeight: 1,
   opacity: 1,
+  '*': {
+    pointerEvents: 'none',
+  },
 }))
 
 const HeightUI = styled('div')`

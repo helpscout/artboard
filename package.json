@@ -21,7 +21,7 @@
     "version": "npm run build",
     "postversion": "npm publish",
     "start": "npm run storybook",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -p 6007",
     "build-storybook": "build-storybook",
     "prettier": "prettier \"src/**/*.js\" --write",
     "pretty": "npm run prettier"

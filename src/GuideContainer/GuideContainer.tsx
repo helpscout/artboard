@@ -1,6 +1,7 @@
 import * as React from 'react'
 import styled from '@helpscout/fancy'
-import {getPreparedProps} from '../utils'
+import classNames from '@helpscout/react-utils/dist/classNames'
+import {cx, getPreparedProps} from '../utils'
 
 class GuideContainer extends React.PureComponent<any> {
   static defaultProps = {
@@ -11,8 +12,14 @@ class GuideContainer extends React.PureComponent<any> {
   }
 
   render() {
-    const {children, ...rest} = this.props
-    return <GuideContainerUI {...getPreparedProps(rest)} children={children} />
+    const {className, children, ...rest} = this.props
+    return (
+      <GuideContainerUI
+        {...getPreparedProps(rest)}
+        children={children}
+        className={classNames(cx('Guide'), className)}
+      />
+    )
   }
 }
 
