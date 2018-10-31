@@ -22,3 +22,21 @@ stories.add('Artboard', () => (
     </div>
   </Artboard>
 ))
+
+stories.add('zoomLevel', () => (
+  <Artboard minHeight={193} minWidth={360} zoomLevel={2}>
+    <div
+      style={{
+        boxSizing: 'border-box',
+        background: '#eee',
+        padding: 20,
+        position: 'relative',
+        height: '100%',
+        minHeight: 193,
+      }}
+    >
+      <OptionTileGuides />
+      <OptionTile />
+    </div>
+  </Artboard>
+))

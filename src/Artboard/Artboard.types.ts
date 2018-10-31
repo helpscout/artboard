@@ -11,6 +11,8 @@ export interface Props {
   minWidth?: number
   maxHeight?: number
   maxWidth?: number
+  posX: number
+  posY: number
   zoomLevel: number
 }
 

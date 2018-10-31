@@ -28,10 +28,29 @@ export class Artboard extends React.Component<Props, State> {
     darkMode: false,
     defaultHeight: 400,
     defaultWidth: 400,
+    posX: 0,
+    posY: 0,
+    showGuides: true,
+    showBoxInspector: false,
+    zoomLevel: 1,
   }
 
-  state = initialState
   __bodyBackGroundColor: string | null = null
+
+  constructor(props) {
+    super(props)
+
+    const {posX, posY, showGuides, showBoxInspector, zoomLevel} = props
+
+    this.state = {
+      ...initialState,
+      posX,
+      posY,
+      showGuides,
+      showBoxInspector,
+      zoomLevel,
+    }
+  }
 
   componentDidMount() {
     window.addEventListener('keydown', this.handleOnKeyDown)
