@@ -81,8 +81,8 @@ const BoxInspectorUI = styled('div')`
       pointer-events: auto !important;
     }
 
-    [class*="HSDSUIDevKit"],
-    .HSDSUIDevKit-Guide * {
+    [class*="${cx()}"],
+    .${cx('Guide')} * {
       pointer-events: none !important;
     }
   `};

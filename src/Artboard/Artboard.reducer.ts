@@ -8,6 +8,8 @@ export const initialState = {
   isZooming: undefined,
   posX: 0,
   posY: 0,
+  showGuides: true,
+  showBoxInspector: false,
   zoomLevel: 1,
 }
 
@@ -79,6 +81,16 @@ const reducer = (state: State = initialState, action: Action) => {
     case ActionTypes.ZOOM_RESET:
       return {
         isZooming: undefined,
+      }
+
+    case ActionTypes.TOGGLE_GUIDES:
+      return {
+        showGuides: !state.showGuides,
+      }
+
+    case ActionTypes.TOGGLE_BOX_INSPECTOR:
+      return {
+        showBoxInspector: !state.showBoxInspector,
       }
 
     case ActionTypes.RESET:

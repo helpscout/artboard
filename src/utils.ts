@@ -26,8 +26,11 @@ export function getPreparedProps(props: Object): Object {
   }
 }
 
-export function cx(className: string): string {
-  return `HSDSUIDevKit-${className}`
+export function cx(className?: string): string {
+  const prefix = 'HSDSUIDevKit'
+  if (!className) return prefix
+
+  return `${prefix}-${className}`
 }
 
 export function isInputNode(node: HTMLElement): boolean {

@@ -1,9 +1,13 @@
 import {Props, State, Action} from './Artboard.types'
 import * as React from 'react'
 import KeyboardHints from './Artboard.KeyboardHints'
+import ToolbarButton from './Artboard.ToolbarButton'
+import Toolbar from './Artboard.Toolbar'
 import reducer, {initialState} from './Artboard.reducer'
 import Zoom from './Artboard.Zoom'
+import BoxInspector from '../BoxInspector'
 import Resizer from '../Resizer'
+import GuideProvider from '../GuideProvider'
 import ActionTypes from './Artboard.ActionTypes'
 import {cx, Keys, isInputNode} from '../utils'
 import {
@@ -12,6 +16,7 @@ import {
   ContentUI,
   ZoomWrapperUI,
   KeyboardHintsWrapperUI,
+  ToolbarWrapperUI,
   config,
 } from './Artboard.css'
 
@@ -200,33 +205,71 @@ export class Artboard extends React.Component<Props, State> {
     }
   }
 
+  toggleGuides = () => {
+    this.setStateWithReducer({type: ActionTypes.TOGGLE_GUIDES})
+  }
+
+  toggleBoxInspector = () => {
+    this.setStateWithReducer({type: ActionTypes.TOGGLE_BOX_INSPECTOR})
+  }
+
+  renderToolbar = () => {
+    const {showBoxInspector, showGuides} = this.state
+    return (
+      <ToolbarWrapperUI>
+        <Toolbar>
+          <ToolbarButton
+            onClick={this.toggleGuides}
+            label="Guides"
+            icon="📏"
+            isActive={showGuides}
+          />
+          <ToolbarButton
+            onClick={this.toggleBoxInspector}
+            label="Box Inspector"
+            icon="📦"
+            isActive={showBoxInspector}
+          />
+        </Toolbar>
+      </ToolbarWrapperUI>
+    )
+  }
+
   render() {
     const {alignHorizontally, alignVertically, children} = this.props
+    const {showGuides, showBoxInspector} = this.state
 
     return (
-      <ArtboardWrapperUI className={cx('ArtboardWrapper')} {...this.state}>
-        <ArtboardUI {...this.state} className={cx('Artboard')}>
-          <ContentUI
-            className={cx('ArtboardContent')}
-            {...{
-              alignHorizontally,
-              alignVertically,
-            }}
-          >
-            <Resizer {...this.getResizerProps()}>{children}</Resizer>
-          </ContentUI>
-        </ArtboardUI>
-        <ZoomWrapperUI>
-          <Zoom
-            onZoomIn={this.zoomIn}
-            onZoomOut={this.zoomOut}
-            zoomLevel={this.state.zoomLevel}
-          />
-        </ZoomWrapperUI>
-        <KeyboardHintsWrapperUI>
-          <KeyboardHints />
-        </KeyboardHintsWrapperUI>
-      </ArtboardWrapperUI>
+      <GuideProvider showGuide={showGuides}>
+        <ArtboardWrapperUI className={cx('ArtboardWrapper')} {...this.state}>
+          {this.renderToolbar()}
+          <ArtboardUI {...this.state} className={cx('Artboard')}>
+            <ContentUI
+              className={cx('ArtboardContent')}
+              {...{
+                alignHorizontally,
+                alignVertically,
+              }}
+            >
+              <Resizer {...this.getResizerProps()}>
+                <BoxInspector showOutlines={showBoxInspector}>
+                  {children}
+                </BoxInspector>
+              </Resizer>
+            </ContentUI>
+          </ArtboardUI>
+          <ZoomWrapperUI>
+            <Zoom
+              onZoomIn={this.zoomIn}
+              onZoomOut={this.zoomOut}
+              zoomLevel={this.state.zoomLevel}
+            />
+          </ZoomWrapperUI>
+          <KeyboardHintsWrapperUI>
+            <KeyboardHints />
+          </KeyboardHintsWrapperUI>
+        </ArtboardWrapperUI>
+      </GuideProvider>
     )
   }
 }

@@ -17,6 +17,8 @@ export interface State {
   isKeyDown: boolean
   isMoving: 'start' | 'dragging' | undefined
   isZooming: 'in' | 'out' | undefined
+  showGuides: boolean
+  showBoxInspector: boolean
   posX: number
   posY: number
   zoomLevel: number

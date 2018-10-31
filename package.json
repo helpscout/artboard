@@ -1,5 +1,5 @@
 {
-  "name": "@helscout/hsds-ui-devkit",
+  "name": "@helscout/artboard",
   "version": "0.0.1",
   "description": "A tool kit for React UI development and design",
   "main": "dist/index.js",

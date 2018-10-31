@@ -1,6 +1,6 @@
-# 🖲 HSDS: UI DevKit
+# 🖼 Artboard
 
-[![Build Status](https://travis-ci.org/helpscout/hsds-ui-devkit.svg?branch=master)](https://travis-ci.org/helpscout/hsds-ui-devkit)
+[![Build Status](https://travis-ci.org/helpscout/artboard.svg?branch=master)](https://travis-ci.org/helpscout/artboard)
 
 > A tool kit for React UI development and design
 

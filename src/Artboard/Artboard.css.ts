@@ -95,20 +95,23 @@ export const ContentUI = styled('div')`
   }
 `
 
-export const BottomToolBar = styled('div')`
+export const GenericToolBarUI = styled('div')`
   align-items: center;
   display: flex;
   justify-content: center;
   position: fixed;
-  bottom: 30px;
   width: 100%;
   z-index: 3;
 `
 
-export const ZoomWrapperUI = styled(BottomToolBar)`
+export const ZoomWrapperUI = styled(GenericToolBarUI)`
   bottom: 40px;
 `
 
-export const KeyboardHintsWrapperUI = styled(BottomToolBar)`
+export const KeyboardHintsWrapperUI = styled(GenericToolBarUI)`
   bottom: 10px;
+`
+
+export const ToolbarWrapperUI = styled(GenericToolBarUI)`
+  top: 20px;
 `

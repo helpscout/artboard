@@ -3,6 +3,7 @@ import styled from '@helpscout/fancy'
 import classNames from '@helpscout/react-utils/dist/classNames'
 import ResizeObserver from 'resize-observer-polyfill'
 import GuideContext from '../GuideContext'
+import Container from './Guide.Container'
 import {rgba} from 'polished'
 import {cx, getPreparedProps} from '../utils'
 
@@ -66,14 +67,14 @@ class Guide extends React.PureComponent<any, State> {
     const {className, children, showGuide, ...rest} = this.props
     const {height, width} = this.state
 
-    if (!showGuide) return null
-
     return (
       <GuideContext.Consumer>
         {contextProps => {
           const mergedProps = getPreparedProps({...rest, ...contextProps})
           // @ts-ignore
-          const {showValues} = mergedProps
+          const {showGuide, showValues} = mergedProps
+
+          if (!showGuide) return null
 
           return (
             <GuideUI
@@ -132,4 +133,10 @@ const WidthUI = styled('div')`
   text-align: center;
 `
 
-export default Guide
+const connectedGuide = props => (
+  <Container {...props}>
+    <Guide {...props} />
+  </Container>
+)
+
+export default connectedGuide
