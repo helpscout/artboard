@@ -68,3 +68,22 @@ stories.add('Guides', () => (
     </div>
   </Artboard>
 ))
+
+stories.add('Without Crosshar', () => (
+  <Artboard
+    withResponsiveWidth
+    withCrosshair={false}
+    guides={[
+      <Guide height="20px" top="15px" width="100%" />,
+      <Guide height="20px" bottom="15px" width="100%" />,
+      <Guide height="100%" left="15px" width="10px" />,
+      <Guide height="100%" right="15px" width="10px" />,
+    ]}
+  >
+    <div style={{background: '#eee', textAlign: 'center'}}>
+      <Button version={2} kind="primary" size="lg">
+        Button
+      </Button>
+    </div>
+  </Artboard>
+))

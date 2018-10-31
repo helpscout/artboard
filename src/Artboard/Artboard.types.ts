@@ -16,6 +16,7 @@ export interface Props {
   posY: number
   withResponsiveHeight: boolean
   withResponsiveWidth: boolean
+  withCrosshair: boolean
   zoomLevel: number
 }
 

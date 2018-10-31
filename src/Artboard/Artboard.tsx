@@ -34,6 +34,7 @@ export class Artboard extends React.Component<Props, State> {
     posY: 0,
     showGuides: true,
     showBoxInspector: false,
+    withCrosshair: true,
     zoomLevel: 1,
   }
 
@@ -274,8 +275,9 @@ export class Artboard extends React.Component<Props, State> {
   }
 
   renderGuides = () => {
-    const {guides} = this.props
+    const {guides, withCrosshair} = this.props
 
+    console.log(withCrosshair)
     return (
       <GuideContainer
         position="absolute"
@@ -286,8 +288,10 @@ export class Artboard extends React.Component<Props, State> {
         zIndex={999999}
       >
         {guides}
-        <Guide top="50%" width="100%" height={1} showValues={false} />
-        <Guide left="50%" height="100%" width={1} showValues={false} />
+        {withCrosshair && [
+          <Guide top="50%" width="100%" height={1} showValues={false} />,
+          <Guide left="50%" height="100%" width={1} showValues={false} />,
+        ]}
       </GuideContainer>
     )
   }
