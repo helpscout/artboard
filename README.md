@@ -1,6 +1,6 @@
-# 📏 HSDS: Guides
+# 📏 HSDS: UI DevKit
 
-> Visual guides for UI development and design
+> A tool kit for React UI development and design
 
 ![Guides Demo](./images/guides-demo.gif)
 

@@ -1,7 +1,7 @@
 {
-  "name": "@helscout/hsds-guides",
+  "name": "@helscout/hsds-ui-devkit",
   "version": "0.0.1",
-  "description": "Visual guides for UI development and design",
+  "description": "A tool kit for React UI development and design",
   "main": "dist/index.js",
   "scripts": {
     "build": "zero build",
