@@ -2,6 +2,7 @@ import * as React from 'react'
 import styled from '@helpscout/fancy'
 import {cx, noop} from '../utils'
 import {darken} from 'polished'
+import Icon from '../Icon'
 
 export interface Props {
   label: string
@@ -14,16 +15,23 @@ export class ToolbarButton extends React.PureComponent<Props> {
   static defaultProps = {
     isActive: true,
     label: 'Action',
-    icon: '🎬',
+    icon: 'Box',
     onClick: noop,
   }
 
+  renderIcon = () => {
+    const {icon} = this.props
+    const Component = Icon[icon]
+
+    return <Component size="14px" />
+  }
+
   render() {
-    const {isActive, icon, label, onClick} = this.props
+    const {isActive, label, onClick} = this.props
     return (
       <ToolbarButtonUI className={cx('ToolbarButton')}>
         <ButtonUI onClick={onClick} isActive={isActive}>
-          <IconUI>{icon}</IconUI>
+          <IconUI>{this.renderIcon()}</IconUI>
         </ButtonUI>
         {label}
       </ToolbarButtonUI>
@@ -39,6 +47,7 @@ const ToolbarButtonUI = styled('div')`
 
 const ButtonUI = styled('button')`
   border-radius: 4px;
+  cursor: pointer;
   pointer-events: all;
   margin-bottom: 4px;
   outline: none;
@@ -48,11 +57,12 @@ const ButtonUI = styled('button')`
     `
     background: #3c93f7;
     border-color: ${darken(0.1, '#3c93f7')};
+    color: white;
   `};
 `
 
 const IconUI = styled('span')`
-  padding-left: 3px;
+  padding: 2px 6px;
   display: block;
 `
 

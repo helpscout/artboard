@@ -234,13 +234,13 @@ export class Artboard extends React.Component<Props, State> {
           <ToolbarButton
             onClick={this.toggleGuides}
             label="Guides"
-            icon="📏"
+            icon="Ruler"
             isActive={showGuides}
           />
           <ToolbarButton
             onClick={this.toggleBoxInspector}
             label="Box Inspector"
-            icon="📦"
+            icon="Box"
             isActive={showBoxInspector}
           />
         </Toolbar>

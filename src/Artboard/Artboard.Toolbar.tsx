@@ -31,8 +31,8 @@ const ToolbarContentUI = styled('div')`
   justify-content: center;
   margin-bottom: 5px;
 
-  * {
-    margin: 0 5px;
+  > * {
+    margin: 0 10px;
   }
 `
 

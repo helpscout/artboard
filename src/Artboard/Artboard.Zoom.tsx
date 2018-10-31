@@ -35,7 +35,7 @@ export class Zoom extends React.PureComponent<Props> {
           >
             -
           </button>
-          <div>🔍</div>
+          <ZoomLevelUI>{zoomPercentage}</ZoomLevelUI>
           <button
             onClick={onZoomIn}
             title="Zoom out"
@@ -45,7 +45,7 @@ export class Zoom extends React.PureComponent<Props> {
             +
           </button>
         </ZoomActionsUI>
-        <ZoomLevelUI>{zoomPercentage}</ZoomLevelUI>
+        <ZoomTextUI>Zoom</ZoomTextUI>
       </ZoomUI>
     )
   }
@@ -69,14 +69,19 @@ const ZoomActionsUI = styled('div')`
   margin-bottom: 5px;
   pointer-events: all;
 
-  * {
+  > * {
     margin: 0 5px;
   }
 `
 
-const ZoomLevelUI = styled('div')`
+const ZoomTextUI = styled('div')`
   font-size: 11px;
   line-height: 1;
+`
+
+const ZoomLevelUI = styled(ZoomTextUI)`
+  position: relative;
+  right: -1px;
 `
 
 export default Zoom
