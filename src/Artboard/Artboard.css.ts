@@ -51,6 +51,11 @@ export const ArtboardUI = styled('div')`
     `
     pointer-events: none;
     user-select: none;
+
+    * {
+      pointer-events: none !important;
+      user-select: none !important;
+    }
   `};
 
   ${({posX, posY, zoomLevel}) => `
