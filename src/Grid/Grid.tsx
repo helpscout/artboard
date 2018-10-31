@@ -1,10 +1,10 @@
-import React from 'react'
+import * as React from 'react'
 import styled from '@helpscout/fancy'
 import GuideContainer from '../GuideContainer'
 import GuideProvider from '../GuideProvider'
 import Guide from '../Guide'
 
-class Grid extends React.PureComponent {
+class Grid extends React.PureComponent<any> {
   static defaultProps = {
     maxWidth: 1020,
     margin: 'auto',
@@ -12,7 +12,7 @@ class Grid extends React.PureComponent {
     grid: 12,
   }
 
-  getGuideProps = () => {
+  getGuideProps = (): Object => {
     const {gutter} = this.props
     const gutterOffset = gutter / 2
 
@@ -27,7 +27,7 @@ class Grid extends React.PureComponent {
     }
   }
 
-  getContainerProps = () => {
+  getContainerProps = (): Object => {
     const {grid, gutter, ...rest} = this.props
 
     return {
@@ -36,7 +36,7 @@ class Grid extends React.PureComponent {
     }
   }
 
-  getRowProps = () => {
+  getRowProps = (): Object => {
     const {gutter} = this.props
 
     const gutterOffset = (gutter / 2) * -1
@@ -51,7 +51,7 @@ class Grid extends React.PureComponent {
     }
   }
 
-  renderGuides = () => {
+  renderGuides = (): Array<any> => {
     const {grid} = this.props
 
     return [...Array.from(Array(grid).keys())].map((item, index) => (

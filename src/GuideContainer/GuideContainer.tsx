@@ -1,8 +1,8 @@
-import React from 'react'
+import * as React from 'react'
 import styled from '@helpscout/fancy'
 import {getPreparedProps} from '../utils'
 
-class GuideContainer extends React.PureComponent {
+class GuideContainer extends React.PureComponent<any> {
   static defaultProps = {
     position: 'relative',
     width: '100%',

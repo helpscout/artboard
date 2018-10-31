@@ -1,7 +1,7 @@
-import React from 'react'
+import * as React from 'react'
 import GuideContext from '../GuideContext'
 
-class GuideProvider extends React.PureComponent {
+class GuideProvider extends React.PureComponent<any> {
   render() {
     const {children, ...rest} = this.props
 
