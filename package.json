@@ -1,5 +1,5 @@
 {
-  "name": "@helscout/artboard",
+  "name": "@helpscout/artboard",
   "version": "0.0.1",
   "description": "A tool kit for React UI development and design",
   "main": "dist/index.js",
@@ -30,13 +30,18 @@
   "author": "Jon Quach <hello@jonquach.com> (https://jonquach.com)",
   "license": "MIT",
   "keywords": [
+    "artboard",
     "components",
     "guidelines",
+    "devkit",
     "guides",
     "gutter",
     "helpscout",
     "keyline",
-    "react"
+    "react",
+    "sketch",
+    "storybook",
+    "toolkit"
   ],
   "engines": {
     "node": ">=8"
