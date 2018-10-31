@@ -11,7 +11,7 @@
     "bundle": "zero build --bundle",
     "lint": "zero lint",
     "dev": "zero test --watchAll",
-    "git:push": "git push --tags",
+    "git:push": "git push",
     "test": "zero test --coverage",
     "test:update": "npm test -- --updateSnapshot --coverage",
     "validate": "zero validate",
