@@ -1,14 +1,12 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 import OptionTile, {OptionTileGuides} from './Examples/OptionTile.Example'
-import BoxInspector from '../src/BoxInspector'
+import Artboard from '../src/Artboard'
 
-const stories = storiesOf('BoxInspector', module)
+const stories = storiesOf('Artboard', module)
 
-stories.add('Example', () => (
-  <div>
-    Hover your mouse on any element
-    <br />
+stories.add('Artboard', () => (
+  <Artboard minHeight={193} minWidth={360}>
     <div
       style={{
         boxSizing: 'border-box',
@@ -17,13 +15,10 @@ stories.add('Example', () => (
         position: 'relative',
         height: '100%',
         minHeight: 193,
-        width: 360,
       }}
     >
-      <BoxInspector>
-        <OptionTileGuides />
-        <OptionTile />
-      </BoxInspector>
+      <OptionTileGuides />
+      <OptionTile />
     </div>
-  </div>
+  </Artboard>
 ))

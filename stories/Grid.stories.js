@@ -1,8 +1,7 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
-import {ResizableBox} from 'react-resizable'
 import Grid from '../src/Grid'
-import './resizable.css'
+import Resizer from '../src/Resizer'
 
 const stories = storiesOf('Grid', module)
 
@@ -12,8 +11,8 @@ stories.add('Example', () => {
   }
 
   return (
-    <ResizableBox width={800} height={400}>
+    <Resizer width={800} height={400}>
       <Grid {...props} />
-    </ResizableBox>
+    </Resizer>
   )
 })

@@ -1,14 +1,12 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
 import OptionTile, {OptionTileGuides} from './Examples/OptionTile.Example'
-import BoxInspector from '../src/BoxInspector'
+import Resizer from '../src/Resizer'
 
-const stories = storiesOf('BoxInspector', module)
+const stories = storiesOf('Resizer', module)
 
 stories.add('Example', () => (
-  <div>
-    Hover your mouse on any element
-    <br />
+  <Resizer width={350} height={193}>
     <div
       style={{
         boxSizing: 'border-box',
@@ -17,13 +15,10 @@ stories.add('Example', () => (
         position: 'relative',
         height: '100%',
         minHeight: 193,
-        width: 360,
       }}
     >
-      <BoxInspector>
-        <OptionTileGuides />
-        <OptionTile />
-      </BoxInspector>
+      <OptionTileGuides />
+      <OptionTile />
     </div>
-  </div>
+  </Resizer>
 ))
