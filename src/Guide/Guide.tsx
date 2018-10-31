@@ -6,6 +6,7 @@ import GuideContext from '../GuideContext'
 import Container from './Guide.Container'
 import {rgba} from 'polished'
 import {cx, getPreparedProps} from '../utils'
+import {defaultProps} from './Guide.utils'
 
 type Observable = {
   observe: (node: HTMLElement) => void
@@ -18,15 +19,7 @@ export interface State {
 }
 
 class Guide extends React.PureComponent<any, State> {
-  static defaultProps = {
-    color: '#ec5381',
-    opacity: 0.2,
-    height: '100%',
-    width: 25,
-    position: 'absolute',
-    showValues: true,
-    showGuide: true,
-  }
+  static defaultProps = defaultProps
 
   node: HTMLElement
   resizeObserver: Observable
@@ -72,9 +65,7 @@ class Guide extends React.PureComponent<any, State> {
         {contextProps => {
           const mergedProps = getPreparedProps({...rest, ...contextProps})
           // @ts-ignore
-          const {showGuide, showValues} = mergedProps
-
-          if (!showGuide) return null
+          const {showValues} = mergedProps
 
           return (
             <GuideUI

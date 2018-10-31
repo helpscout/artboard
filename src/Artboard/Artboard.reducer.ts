@@ -10,6 +10,8 @@ export const initialState = {
   posY: 0,
   showGuides: true,
   showBoxInspector: false,
+  withResponsiveHeight: false,
+  withResponsiveWidth: false,
   zoomLevel: 1,
 }
 

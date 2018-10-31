@@ -1,8 +1,11 @@
 import * as React from 'react'
 import GuideContext from '../GuideContext'
 import {getPreparedProps} from '../utils'
+import {defaultProps} from './Guide.utils'
 
 class GuideContainer extends React.PureComponent<any> {
+  static defaultProps = defaultProps
+
   render() {
     const {children, ...rest} = this.props
 
@@ -15,7 +18,7 @@ class GuideContainer extends React.PureComponent<any> {
 
           if (!showGuide) return <div />
 
-          return <div>{children}</div>
+          return children
         }}
       </GuideContext.Consumer>
     )

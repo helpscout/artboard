@@ -4,6 +4,11 @@ import styled from '@helpscout/fancy'
 import {cx} from '../utils'
 
 export class Resizer extends React.PureComponent<any> {
+  static defaultProps = {
+    withResponsiveHeight: false,
+    withResponsiveWidth: false,
+  }
+
   getResizableProps = () => {
     const {
       defaultHeight,
@@ -43,7 +48,9 @@ export class Resizer extends React.PureComponent<any> {
     return (
       <ResizerUI className={cx('ResizerWrapper')}>
         <ResizableBox {...this.getResizableProps()} className={cx('Resizer')}>
-          <div className={cx('ResizerContent')}>{this.props.children}</div>
+          <ContentUI className={cx('ResizerContent')} {...this.props}>
+            {this.props.children}
+          </ContentUI>
         </ResizableBox>
       </ResizerUI>
     )
@@ -74,6 +81,22 @@ const ResizerUI = styled('div')`
       right: 15px;
     }
   }
+`
+
+const ContentUI = styled('div')`
+  position: relative;
+
+  ${({withResponsiveHeight}) =>
+    withResponsiveHeight &&
+    `
+    height: 100%;
+  `};
+
+  ${({withResponsiveWidth}) =>
+    withResponsiveWidth &&
+    `
+    width: 100%;
+  `};
 `
 
 export default Resizer

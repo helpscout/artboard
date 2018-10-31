@@ -5,6 +5,7 @@ export interface Props {
   defaultHeight: number
   defaultWidth: number
   darkMode: boolean
+  guides: any
   height?: number
   width?: number
   minHeight?: number
@@ -13,6 +14,8 @@ export interface Props {
   maxWidth?: number
   posX: number
   posY: number
+  withResponsiveHeight: boolean
+  withResponsiveWidth: boolean
   zoomLevel: number
 }
 

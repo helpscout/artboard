@@ -1,19 +1,29 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
+import Button from '@helpscout/blue/components/Button'
 import OptionTile, {OptionTileGuides} from './Examples/OptionTile.Example'
 import Artboard from '../src/Artboard'
+import Guide from '../src/Guide'
 
 const stories = storiesOf('Artboard', module)
 
-stories.add('Artboard', () => (
+stories.add('Simple', () => (
+  <Artboard withResponsiveWidth>
+    <div style={{background: '#eee', textAlign: 'center'}}>
+      <Button version={2} kind="primary" size="lg">
+        Button
+      </Button>
+    </div>
+  </Artboard>
+))
+
+stories.add('Component', () => (
   <Artboard minHeight={193} minWidth={360}>
     <div
       style={{
         boxSizing: 'border-box',
         background: '#eee',
         padding: 20,
-        position: 'relative',
-        height: '100%',
         minHeight: 193,
       }}
     >
@@ -23,6 +33,8 @@ stories.add('Artboard', () => (
   </Artboard>
 ))
 
+stories.add('Empty', () => <Artboard />)
+
 stories.add('zoomLevel', () => (
   <Artboard minHeight={193} minWidth={360} zoomLevel={2}>
     <div
@@ -30,13 +42,29 @@ stories.add('zoomLevel', () => (
         boxSizing: 'border-box',
         background: '#eee',
         padding: 20,
-        position: 'relative',
-        height: '100%',
         minHeight: 193,
       }}
     >
       <OptionTileGuides />
       <OptionTile />
+    </div>
+  </Artboard>
+))
+
+stories.add('Guides', () => (
+  <Artboard
+    withResponsiveWidth
+    guides={[
+      <Guide height="20px" top="15px" width="100%" />,
+      <Guide height="20px" bottom="15px" width="100%" />,
+      <Guide height="100%" left="15px" width="10px" />,
+      <Guide height="100%" right="15px" width="10px" />,
+    ]}
+  >
+    <div style={{background: '#eee', textAlign: 'center'}}>
+      <Button version={2} kind="primary" size="lg">
+        Button
+      </Button>
     </div>
   </Artboard>
 ))

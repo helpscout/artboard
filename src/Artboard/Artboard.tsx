@@ -8,6 +8,8 @@ import Zoom from './Artboard.Zoom'
 import BoxInspector from '../BoxInspector'
 import Resizer from '../Resizer'
 import GuideProvider from '../GuideProvider'
+import GuideContainer from '../GuideContainer'
+import Guide from '../Guide'
 import ActionTypes from './Artboard.ActionTypes'
 import {cx, Keys, isInputNode} from '../utils'
 import {
@@ -223,6 +225,8 @@ export class Artboard extends React.Component<Props, State> {
       minHeight,
       maxWidth,
       maxHeight,
+      withResponsiveHeight,
+      withResponsiveWidth,
     } = this.props
 
     return {
@@ -234,6 +238,8 @@ export class Artboard extends React.Component<Props, State> {
       minHeight,
       maxWidth,
       maxHeight,
+      withResponsiveHeight,
+      withResponsiveWidth,
     }
   }
 
@@ -267,6 +273,25 @@ export class Artboard extends React.Component<Props, State> {
     )
   }
 
+  renderGuides = () => {
+    const {guides} = this.props
+
+    return (
+      <GuideContainer
+        position="absolute"
+        top="0"
+        left="0"
+        width="100%"
+        height="100%"
+        zIndex={999999}
+      >
+        {guides}
+        <Guide top="50%" width="100%" height={1} showValues={false} />
+        <Guide left="50%" height="100%" width={1} showValues={false} />
+      </GuideContainer>
+    )
+  }
+
   render() {
     const {alignHorizontally, alignVertically, children} = this.props
     const {showGuides, showBoxInspector} = this.state
@@ -288,6 +313,7 @@ export class Artboard extends React.Component<Props, State> {
                   {children}
                 </BoxInspector>
               </Resizer>
+              {this.renderGuides()}
             </ContentUI>
           </ArtboardUI>
           <ZoomWrapperUI>

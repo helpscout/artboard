@@ -112,6 +112,7 @@ export const GenericToolBarUI = styled('div')`
   display: flex;
   justify-content: center;
   position: fixed;
+  pointer-events: none;
   width: 100%;
   z-index: 3;
 `
