@@ -5,11 +5,11 @@ import {noop} from '../utils'
 
 export class Eyedropper extends React.Component {
   static defaultProps = {
+    __debug: false,
     onPickColor: noop,
   }
 
   state = {
-    canvas: undefined,
     color: undefined,
     isInPreviewMode: false,
     mouseX: 0,
@@ -44,16 +44,11 @@ export class Eyedropper extends React.Component {
     if (!this.state.canvas) return
     const {x, y} = event
     const color = getColorFromCanvas(this.state.canvas, x, y)
-    const {marginTop, marginLeft} = window.getComputedStyle(document.body)
-    const bodyOffsetX = parseInt(marginLeft, 10)
-    const bodyOffsetY = parseInt(marginTop, 10)
 
     this.safeSetState({
       color,
       mouseX: x,
       mouseY: y,
-      bodyOffsetX,
-      bodyOffsetY,
     })
   }
 
@@ -64,9 +59,6 @@ export class Eyedropper extends React.Component {
   }
 
   closePreview = event => {
-    if (this.state.canvas && this.state.canvas.parentNode) {
-      this.state.canvas.parentNode.removeChild(this.state.canvas)
-    }
     document.body.style.cursor = null
 
     this.safeSetState({
@@ -101,39 +93,27 @@ export class Eyedropper extends React.Component {
 
   startPreviewMode = event => {
     const {x, y} = event
-    html2canvas(document.body).then(canvas => {
-      const hexColor = getColorFromCanvas(canvas, x, y)
 
-      canvas.style.position = 'fixed'
-      canvas.style.top = 0
-      canvas.style.left = 0
-      canvas.style.zIndex = 99999
-
-      document.body.appendChild(canvas)
+    html2canvas(document.body, {
+      logging: this.props.__debug,
+    }).then(canvas => {
       document.body.style.cursor = 'none'
+
       this.safeSetState({
         canvas,
         isInPreviewMode: true,
         mouseX: x,
         mouseY: y,
       })
-      this.props.onPickColor(hexColor)
     })
   }
 
   render() {
-    const {
-      isInPreviewMode,
-      color,
-      mouseX,
-      mouseY,
-      bodyOffsetX,
-      bodyOffsetY,
-    } = this.state
+    const {isInPreviewMode, color, mouseX, mouseY} = this.state
     if (!isInPreviewMode) return null
 
     return (
-      <ColorPreviewUI {...{color, mouseX, mouseY, bodyOffsetX, bodyOffsetY}}>
+      <ColorPreviewUI {...{color, mouseX, mouseY}}>
         <CrosshairUI />
         <LabelUI>{color}</LabelUI>
       </ColorPreviewUI>
@@ -179,15 +159,17 @@ const ColorPreviewUI = styled('div')`
   width: 100px;
   position: fixed;
   z-index: 999999;
+  top: 0;
+  left: 0;
 
   * {
     box-sizing: border-box;
   }
 
-  ${({bodyOffsetX, bodyOffsetY, mouseX, mouseY}) => `
+  ${({mouseX, mouseY}) => `
     transform: translate(
-      ${mouseX - 50 - bodyOffsetX}px,
-      ${mouseY - 50 - bodyOffsetY}px);
+      ${mouseX - 50}px,
+      ${mouseY - 50}px);
   `};
 
   ${({color}) => `
