@@ -13,6 +13,7 @@ import GuideContainer from '../GuideContainer'
 import Guide from '../Guide'
 import ActionTypes from './Artboard.ActionTypes'
 import {cx, Keys, isInputNode} from '../utils'
+import {loadSessionState, saveSessionState} from './Artboard.utils'
 import {
   ArtboardWrapperUI,
   ArtboardUI,
@@ -20,6 +21,7 @@ import {
   ZoomWrapperUI,
   KeyboardHintsWrapperUI,
   ToolbarWrapperUI,
+  ToolbarRightUI,
   config,
 } from './Artboard.css'
 
@@ -44,16 +46,32 @@ export class Artboard extends React.Component<Props, State> {
   constructor(props) {
     super(props)
 
-    const {posX, posY, showGuides, showBoxInspector, zoomLevel} = props
+    const {
+      posX,
+      posY,
+      showGuides,
+      showBoxInspector,
+      width,
+      height,
+      zoomLevel,
+    } = props
 
-    this.state = {
+    const artboardName = this.getArtboardNameFromProps(props)
+    const localState = loadSessionState(artboardName)
+
+    const mergedState = {
       ...initialState,
       posX,
       posY,
       showGuides,
       showBoxInspector,
       zoomLevel,
+      artboardHeight: height,
+      artboardWidth: width,
+      ...localState,
     }
+
+    this.state = mergedState
   }
 
   componentDidMount() {
@@ -91,8 +109,21 @@ export class Artboard extends React.Component<Props, State> {
           console.log('Next State:', this.state)
           console.groupEnd()
         }
+        // Save session to localStorage
+        this.saveState()
       },
     )
+  }
+
+  getArtboardNameFromProps = props => {
+    return props.id || props.name
+  }
+
+  saveState = () => {
+    const artboardName = this.getArtboardNameFromProps(this.props)
+    if (!artboardName) return
+
+    saveSessionState(artboardName, this.state)
   }
 
   stateReducer = (state: State = initialState, action: Action) => {
@@ -217,7 +248,20 @@ export class Artboard extends React.Component<Props, State> {
     return this.setStateWithReducer({type: ActionTypes.ZOOM_OUT})
   }
 
+  handleOnResize = (event, resizeProps) => {
+    const {height, width} = resizeProps.size
+
+    return this.setStateWithReducer({
+      type: ActionTypes.RESIZE_ARTBOARD,
+      payload: {
+        artboardHeight: height,
+        artboardWidth: width,
+      },
+    })
+  }
+
   getResizerProps = () => {
+    const {artboardHeight, artboardWidth} = this.state
     const {
       defaultWidth,
       defaultHeight,
@@ -234,8 +278,8 @@ export class Artboard extends React.Component<Props, State> {
     return {
       defaultWidth,
       defaultHeight,
-      height,
-      width,
+      height: artboardHeight || height,
+      width: artboardWidth || width,
       minWidth,
       minHeight,
       maxWidth,
@@ -267,6 +311,10 @@ export class Artboard extends React.Component<Props, State> {
     this.setStateWithReducer({type: ActionTypes.EYEDROPPER_STOP})
   }
 
+  resetSettings = () => {
+    this.setStateWithReducer({type: ActionTypes.RESET})
+  }
+
   renderToolbar = () => {
     const {showBoxInspector, showGuides} = this.state
     return (
@@ -289,6 +337,13 @@ export class Artboard extends React.Component<Props, State> {
             label="Color"
             icon="EyeDropper"
           />
+          <ToolbarRightUI>
+            <ToolbarButton
+              onClick={this.resetSettings}
+              label="Reset"
+              icon="Refresh"
+            />
+          </ToolbarRightUI>
         </Toolbar>
       </ToolbarWrapperUI>
     )
@@ -361,7 +416,10 @@ export class Artboard extends React.Component<Props, State> {
                 alignVertically,
               }}
             >
-              <Resizer {...this.getResizerProps()}>
+              <Resizer
+                {...this.getResizerProps()}
+                onResize={this.handleOnResize}
+              >
                 <BoxInspector showOutlines={showBoxInspector}>
                   {children}
                 </BoxInspector>

@@ -25,8 +25,8 @@ export class Resizer extends React.PureComponent<any> {
       ...rest
     } = this.props
 
-    const minHeightConstraint = minHeight ? minHeight : 0
-    const minWidthConstraint = minWidth ? minWidth : 0
+    const minHeightConstraint = minHeight ? minHeight : 1
+    const minWidthConstraint = minWidth ? minWidth : 1
 
     const maxHeightConstraint = maxHeight ? maxHeight : Infinity
     const maxWidthConstraint = maxWidth ? maxWidth : Infinity

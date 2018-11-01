@@ -6,6 +6,8 @@ export interface Props {
   defaultWidth: number
   darkMode: boolean
   guides: any
+  id?: string
+  name?: string
   height?: number
   width?: number
   minHeight?: number
@@ -21,6 +23,8 @@ export interface Props {
 }
 
 export interface State {
+  artboardHeight: number
+  artboardWidth: number
   isPerformingAction: boolean
   isEyeDropperActive: boolean
   isKeyDown: boolean

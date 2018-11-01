@@ -6,5 +6,6 @@ node_modules
 coverage
 src
 images
+scripts
 storybook-static
 __tests__

@@ -128,3 +128,11 @@ export const KeyboardHintsWrapperUI = styled(GenericToolBarUI)`
 export const ToolbarWrapperUI = styled(GenericToolBarUI)`
   top: 20px;
 `
+
+export const ToolbarRightUI = styled('div')`
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  right: 10px;
+`

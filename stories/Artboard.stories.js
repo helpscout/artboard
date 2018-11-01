@@ -35,6 +35,18 @@ stories.add('Component', () => (
 
 stories.add('Empty', () => <Artboard />)
 
+stories.add('Session Storage', () => (
+  <Artboard withResponsiveWidth id="session-storage-artboard">
+    <div style={{background: '#eee', textAlign: 'center'}}>
+      <h2>Play around with settings</h2>
+      <p>Then refresh</p>
+      <Button version={2} kind="primary" size="lg">
+        Button
+      </Button>
+    </div>
+  </Artboard>
+))
+
 stories.add('zoomLevel', () => (
   <Artboard minHeight={193} minWidth={360} zoomLevel={2}>
     <div
@@ -60,6 +72,7 @@ stories.add('Guides (Components)', () => (
       <Guide height="100%" left="15px" width="10px" />,
       <Guide height="100%" right="15px" width="10px" />,
     ]}
+    id="session-artboard-guides"
   >
     <div style={{background: '#eee', textAlign: 'center'}}>
       <Button version={2} kind="primary" size="lg">

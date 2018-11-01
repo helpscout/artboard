@@ -2,6 +2,8 @@ import {State, Action} from './Artboard.types'
 import ActionTypes from './Artboard.ActionTypes'
 
 export const initialState = {
+  artboardHeight: 400,
+  artboardWidth: 400,
   isPerformingAction: false,
   isEyeDropperActive: false,
   isKeyDown: false,
@@ -21,8 +23,31 @@ let _zoomLevel = initialState.zoomLevel
 let _posX = initialState.posX
 let _posY = initialState.posY
 
+const ZOOM_LEVEL_MAX = 32
+const ZOOM_LEVEL_MIN = 0.125
+
 const reducer = (state: State = initialState, action: Action) => {
+  let nextZoom = state.zoomLevel
   switch (action.type) {
+    /**
+     * GENERAL ACTIONS
+     */
+    case ActionTypes.PERFORM_ACTION_START:
+      return {
+        isPerformingAction: true,
+      }
+
+    case ActionTypes.PERFORM_ACTION_END:
+      return {
+        isPerformingAction: false,
+      }
+
+    case ActionTypes.RESET:
+      return initialState
+
+    /**
+     * ZOOM ACTIONS
+     */
     case ActionTypes.ZOOM_IN_START:
       return {
         isKeyDown: true,
@@ -38,15 +63,25 @@ const reducer = (state: State = initialState, action: Action) => {
       }
 
     case ActionTypes.ZOOM_IN:
+      nextZoom = state.zoomLevel * 2
       return {
-        zoomLevel: state.zoomLevel * 2,
+        zoomLevel: nextZoom > ZOOM_LEVEL_MAX ? ZOOM_LEVEL_MAX : nextZoom,
       }
 
     case ActionTypes.ZOOM_OUT:
+      nextZoom = state.zoomLevel / 2
       return {
-        zoomLevel: state.zoomLevel / 2,
+        zoomLevel: nextZoom < ZOOM_LEVEL_MIN ? ZOOM_LEVEL_MIN : nextZoom,
       }
 
+    case ActionTypes.ZOOM_RESET:
+      return {
+        isZooming: undefined,
+      }
+
+    /**
+     * MOVE ACTIONS
+     */
     case ActionTypes.MOVE_START:
       return {
         isKeyDown: true,
@@ -76,21 +111,18 @@ const reducer = (state: State = initialState, action: Action) => {
         isMoving: undefined,
       }
 
-    case ActionTypes.PERFORM_ACTION_START:
+    /**
+     * RESIZE ACTIONS
+     */
+    case ActionTypes.RESIZE_ARTBOARD:
       return {
-        isPerformingAction: true,
+        artboardWidth: action.payload.artboardWidth,
+        artboardHeight: action.payload.artboardHeight,
       }
 
-    case ActionTypes.PERFORM_ACTION_END:
-      return {
-        isPerformingAction: false,
-      }
-
-    case ActionTypes.ZOOM_RESET:
-      return {
-        isZooming: undefined,
-      }
-
+    /**
+     * TOOLBAR ACTIONS
+     */
     case ActionTypes.TOGGLE_GUIDES:
       return {
         showGuides: !state.showGuides,
@@ -126,11 +158,6 @@ const reducer = (state: State = initialState, action: Action) => {
         showGuides: _showGuides,
         zoomLevel: _zoomLevel,
       }
-
-    case ActionTypes.RESET:
-      const {isZooming, posX, posY, ...resetState} = initialState
-
-      return resetState
 
     default:
       return {}
