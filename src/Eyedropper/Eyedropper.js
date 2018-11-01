@@ -28,14 +28,14 @@ export class Eyedropper extends React.Component {
     this._isMounted = true
     window.addEventListener('click', this.handleOnClick)
     window.addEventListener('mousemove', this.colorPreview)
-    window.addEventListener('keyup', this.closePreview)
+    window.addEventListener('keyup', this.handleOnKeyUp)
   }
 
   componentWillUnmount() {
     this._isMounted = false
     window.removeEventListener('click', this.handleOnClick)
     window.removeEventListener('mousemove', this.colorPreview)
-    window.removeEventListener('keyup', this.closePreview)
+    window.removeEventListener('keyup', this.handleOnKeyUp)
     this.closePreview()
   }
 

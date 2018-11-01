@@ -18,6 +18,8 @@ export const initialState = {
 
 let _showGuides = initialState.showGuides
 let _zoomLevel = initialState.zoomLevel
+let _posX = initialState.posX
+let _posY = initialState.posY
 
 const reducer = (state: State = initialState, action: Action) => {
   switch (action.type) {
@@ -100,10 +102,15 @@ const reducer = (state: State = initialState, action: Action) => {
       }
 
     case ActionTypes.EYEDROPPER_START:
+      _posX = state.posX
+      _posY = state.posY
       _showGuides = state.showGuides
       _zoomLevel = state.zoomLevel
+
       return {
         isEyeDropperActive: true,
+        posX: 0,
+        posY: 0,
         showGuides: false,
         zoomLevel: 1,
       }
@@ -114,6 +121,8 @@ const reducer = (state: State = initialState, action: Action) => {
     case ActionTypes.EYEDROPPER_STOP:
       return {
         isEyeDropperActive: false,
+        posX: _posX,
+        posY: _posY,
         showGuides: _showGuides,
         zoomLevel: _zoomLevel,
       }
