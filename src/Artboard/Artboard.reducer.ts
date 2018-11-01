@@ -107,8 +107,12 @@ const reducer = (state: State = initialState, action: Action) => {
     case ActionTypes.MOVE_DRAG:
       return {
         isMoving: 'dragging',
-        posX: state.posX + (action.payload.posX * 1) / state.zoomLevel,
-        posY: state.posY + (action.payload.posY * 1) / state.zoomLevel,
+        posX: Math.round(
+          state.posX + (action.payload.posX * 1) / state.zoomLevel,
+        ),
+        posY: Math.round(
+          state.posY + (action.payload.posY * 1) / state.zoomLevel,
+        ),
       }
 
     case ActionTypes.MOVE_END:

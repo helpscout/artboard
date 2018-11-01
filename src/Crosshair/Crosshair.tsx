@@ -1,5 +1,6 @@
 import * as React from 'react'
 import styled from '@helpscout/fancy'
+import Line from './Crosshair.Line'
 import Base from '../UI/Base'
 import {cx, Keys} from '../utils'
 
@@ -14,9 +15,13 @@ export interface Props {
   color: string
   isActive: boolean
   onSnapshot?: (snapshot: Snapshot) => void
+  posX: number
+  posY: number
   showSnapshots: boolean
   snapshotOpacity: number
   snapshots: Snapshots
+  style?: Object
+  zoomLevel: number
 }
 
 export interface State {
@@ -30,9 +35,13 @@ export class Crosshair extends React.PureComponent<Props, State> {
   static defaultProps = {
     color: 'cyan',
     isActive: true,
+    posX: 0,
+    posY: 0,
     snapshots: [],
     snapshotOpacity: 0.4,
     showSnapshots: true,
+    style: {},
+    zoomLevel: 1,
   }
 
   constructor(props) {
@@ -87,13 +96,14 @@ export class Crosshair extends React.PureComponent<Props, State> {
   }
 
   addSnapshot = () => {
+    const {posX, posY} = this.props
     const {isActive, x, y, snapshots} = this.state
 
     if (!isActive) return
 
     const snap = {
-      x,
-      y,
+      x: x - posX,
+      y: y - posY,
     }
 
     if (this.props.onSnapshot) {
@@ -112,7 +122,14 @@ export class Crosshair extends React.PureComponent<Props, State> {
   }
 
   renderSnapshots = () => {
-    const {color, showSnapshots, snapshotOpacity} = this.props
+    const {
+      color,
+      posX,
+      posY,
+      showSnapshots,
+      snapshotOpacity,
+      zoomLevel,
+    } = this.props
     const {snapshots} = this.state
 
     if (!showSnapshots) return null
@@ -122,17 +139,23 @@ export class Crosshair extends React.PureComponent<Props, State> {
 
       return (
         <div key={`snap-${index}`}>
-          <LineXUI
+          <Line
             color={color}
             className={cx('CrosshairLineXSnap')}
             y={y}
+            posY={posY}
+            coordinate="x"
             opacity={snapshotOpacity}
+            zoomLevel={zoomLevel}
           />
-          <LineYUI
+          <Line
             color={color}
             className={cx('CrosshairLineYSnap')}
             x={x}
+            posX={posX}
+            coordinate="y"
             opacity={snapshotOpacity}
+            zoomLevel={zoomLevel}
           />
         </div>
       )
@@ -140,15 +163,27 @@ export class Crosshair extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const {color} = this.props
+    const {color, style} = this.props
     const {x, y, isActive} = this.state
 
     return (
-      <CrosshairUI className={cx('Crosshair')}>
+      <CrosshairUI className={cx('Crosshair')} style={style}>
         {isActive && (
           <div>
-            <LineXUI color={color} className={cx('CrosshairLineX')} y={y} />
-            <LineYUI color={color} className={cx('CrosshairLineY')} x={x} />
+            <Line
+              color={color}
+              className={cx('CrosshairLineX')}
+              y={y}
+              posY={0}
+              coordinate="x"
+            />
+            <Line
+              color={color}
+              className={cx('CrosshairLineY')}
+              x={x}
+              posX={0}
+              coordinate="y"
+            />
           </div>
         )}
         {this.renderSnapshots()}
@@ -169,60 +204,6 @@ const CrosshairUI = styled(Base)`
   * {
     pointer-events: none;
   }
-`
-
-const LineBaseUI = styled('div')`
-  position: absolute;
-  top: 0;
-  left: 0;
-  will-change: transform;
-
-  &:before {
-    color: currentColor;
-    font-size: 11px;
-    padding-top: 2px;
-    padding-left: 2px;
-    will-change: contents;
-  }
-
-  ${({color}) => `
-    color: ${color};
-    background-color: currentColor;
-  `};
-
-  ${({opacity}) => `
-    opacity: ${opacity};
-  `};
-`
-
-LineBaseUI.defaultProps = {
-  opacity: 1,
-}
-
-const LineXUI = styled(LineBaseUI)`
-  width: 100%;
-  height: 1px;
-
-  ${({y}) => `
-    transform: translateY(${y}px);
-
-    &:before {
-      content: "${y}px";
-    }
-  `};
-`
-
-const LineYUI = styled(LineBaseUI)`
-  height: 100%;
-  width: 1px;
-
-  ${({x}) => `
-    transform: translateX(${x}px);
-
-    &:before {
-      content: "${x}px";
-    }
-  `};
 `
 
 export default Crosshair

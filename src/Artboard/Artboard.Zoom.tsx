@@ -5,8 +5,8 @@ import Button from '../UI/Button'
 import {noop} from '../utils'
 
 export interface Props {
-  onZoomIn: () => void
-  onZoomOut: () => void
+  onZoomIn: (event: Event) => void
+  onZoomOut: (event: Event) => void
   zoomLevel: number
 }
 

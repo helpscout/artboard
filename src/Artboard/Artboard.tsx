@@ -262,11 +262,17 @@ export class Artboard extends React.Component<Props, State> {
     this.setStateWithReducer({type: ActionTypes.MOVE_START})
   }
 
-  zoomIn = () => {
+  zoomIn = (event?: Event) => {
+    if (event) {
+      event.stopPropagation()
+    }
     return this.setStateWithReducer({type: ActionTypes.ZOOM_IN})
   }
 
-  zoomOut = () => {
+  zoomOut = (event?: Event) => {
+    if (event) {
+      event.stopPropagation()
+    }
     return this.setStateWithReducer({type: ActionTypes.ZOOM_OUT})
   }
 
@@ -485,8 +491,11 @@ export class Artboard extends React.Component<Props, State> {
       showBoxInspector,
       isCrosshairActive,
       isEyeDropperActive,
+      posX,
+      posY,
       snapshots,
       showSnapshots,
+      zoomLevel,
     } = this.state
 
     return (
@@ -497,6 +506,9 @@ export class Artboard extends React.Component<Props, State> {
             showSnapshots={showSnapshots}
             snapshots={snapshots}
             onSnapshot={this.addSnapshot}
+            posX={posX}
+            posY={posY}
+            zoomLevel={zoomLevel}
           />
           <Eyedropper
             isActive={isEyeDropperActive}
