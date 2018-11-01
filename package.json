@@ -29,6 +29,13 @@
     "pretty": "npm run prettier"
   },
   "author": "Jon Quach <hello@jonquach.com> (https://jonquach.com)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/helpscout/artboard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/helpscout/artboard/issues"
+  },
   "license": "MIT",
   "keywords": [
     "artboard",
