@@ -40,7 +40,7 @@ const ToolbarButtonUI = styled(Base)`
   display: flex;
   align-items: center;
   flex-direction: column;
-  min-width: 80px;
+  min-width: 70px;
 `
 
 const ButtonUI = styled('div')`

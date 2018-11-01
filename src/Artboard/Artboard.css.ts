@@ -45,6 +45,7 @@ export const ArtboardUI = styled('div')`
     0 12px 40px rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
   transition: transform 200ms ease;
+  will-change: transform;
 
   ${({isPerformingAction}) =>
     isPerformingAction &&
@@ -56,10 +57,6 @@ export const ArtboardUI = styled('div')`
       pointer-events: none !important;
       user-select: none !important;
     }
-  `};
-
-  ${({posX, posY, zoomLevel}) => `
-    transform: scale(${zoomLevel}) translate(${posX}px, ${posY}px);
   `};
 
   ${({isMoving}) =>
@@ -113,6 +110,7 @@ export const GenericToolBarUI = styled('div')`
   justify-content: center;
   position: fixed;
   pointer-events: none;
+  transform: translateZ(0);
   width: 100%;
   z-index: 3;
 `

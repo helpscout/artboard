@@ -58,8 +58,10 @@ export class Eyedropper extends React.Component {
   }
 
   handleOnKeyUp = event => {
-    if (event.keyCode === Keys.ESC) {
-      this.closePreview()
+    if (this.state.isInPreviewMode) {
+      if (event.keyCode === Keys.ESC) {
+        this.closePreview()
+      }
     }
   }
 
@@ -134,12 +136,28 @@ export class Eyedropper extends React.Component {
     document.body.removeChild(el)
   }
 
+  getColorPreviewStyles = () => {
+    const {color, mouseX, mouseY} = this.state
+
+    const boxShadow = `
+      0 0 0 3px ${color},
+      0 2px 4px rgba(0, 0, 0, 0.1),
+      0 0px 12px 3px rgba(0, 0, 0, 0.3),
+      0 8px 20px rgba(0, 0, 0, 0.2)
+    `
+
+    return {
+      boxShadow,
+      transform: `translate(${mouseX - 50}px,${mouseY - 50}px)`,
+    }
+  }
+
   render() {
-    const {isInPreviewMode, color, mouseX, mouseY} = this.state
+    const {isInPreviewMode, color} = this.state
     if (!isInPreviewMode) return null
 
     return (
-      <ColorPreviewUI {...{color, mouseX, mouseY}}>
+      <ColorPreviewUI style={this.getColorPreviewStyles()}>
         <CrosshairUI />
         <LabelUI>{color}</LabelUI>
       </ColorPreviewUI>
@@ -187,23 +205,11 @@ const ColorPreviewUI = styled('div')`
   z-index: 999999;
   top: 0;
   left: 0;
+  will-change: transform, box-shadow;
 
   * {
     box-sizing: border-box;
   }
-
-  ${({mouseX, mouseY}) => `
-    transform: translate(
-      ${mouseX - 50}px,
-      ${mouseY - 50}px);
-  `};
-
-  ${({color}) => `
-    box-shadow: 0 0 0 3px ${color},
-      0 2px 4px rgba(0, 0, 0, 0.1),
-      0 0px 12px 3px rgba(0, 0, 0, 0.3),
-      0 8px 20px rgba(0, 0, 0, 0.2);
-  `};
 `
 
 const CrosshairUI = styled('div')`

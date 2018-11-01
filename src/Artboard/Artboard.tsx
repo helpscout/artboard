@@ -470,6 +470,14 @@ export class Artboard extends React.Component<Props, State> {
     )
   }
 
+  getArtboardStyles = () => {
+    const {posX, posY, zoomLevel} = this.state
+
+    return {
+      transform: `scale(${zoomLevel}) translate(${posX}px, ${posY}px)`,
+    }
+  }
+
   render() {
     const {alignHorizontally, alignVertically, children} = this.props
     const {
@@ -496,7 +504,11 @@ export class Artboard extends React.Component<Props, State> {
             onStop={this.stopEyeDropper}
           />
           {this.renderToolbar()}
-          <ArtboardUI {...this.state} className={cx('Artboard')}>
+          <ArtboardUI
+            {...this.state}
+            className={cx('Artboard')}
+            style={this.getArtboardStyles()}
+          >
             <ContentUI
               className={cx('ArtboardContent')}
               {...{

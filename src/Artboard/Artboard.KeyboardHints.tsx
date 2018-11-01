@@ -37,6 +37,7 @@ const KeyboardHintsUI = styled(Base)`
   flex-direction: column;
   opacity: 0.3;
   pointer-events: none;
+  transform: translateZ(0);
   z-index: 999999;
 `
 

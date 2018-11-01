@@ -100,6 +100,7 @@ const GuideUI = styled('div')(({children, ...props}) => ({
   '*': {
     pointerEvents: 'none',
   },
+  willChange: 'width, height',
 }))
 
 const HeightUI = styled('div')`
@@ -115,6 +116,7 @@ const HeightUI = styled('div')`
 
 const HeightTextUI = styled('div')`
   transform: rotate(-90deg);
+  will-change: contents;
 `
 
 const WidthUI = styled('div')`
@@ -122,6 +124,7 @@ const WidthUI = styled('div')`
   top: 2px;
   width: 100%;
   text-align: center;
+  will-change: contents;
 `
 
 const connectedGuide = props => (

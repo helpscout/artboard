@@ -59,6 +59,7 @@ const ZoomUI = styled(Base)`
   justify-content: center;
   flex-direction: column;
   pointer-events: none;
+  transform: translateZ(0);
   z-index: 999999;
 `
 
@@ -75,13 +76,16 @@ const ZoomActionsUI = styled('div')`
 `
 
 const ZoomTextUI = styled('div')`
+  box-sizing: border-box;
   font-size: 11px;
   line-height: 1;
 `
 
 const ZoomLevelUI = styled(ZoomTextUI)`
   position: relative;
-  right: -1px;
+  text-align: center;
+  padding-left: 1px;
+  width: 32px;
 `
 
 export default Zoom

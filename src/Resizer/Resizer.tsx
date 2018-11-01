@@ -62,6 +62,7 @@ export class Resizer extends React.PureComponent<any> {
 const ResizerUI = styled('div')`
   .react-resizable {
     position: relative;
+    will-change: height, width;
   }
   .react-resizable-handle {
     bottom: -25px;

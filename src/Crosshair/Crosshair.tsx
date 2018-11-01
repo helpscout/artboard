@@ -175,12 +175,14 @@ const LineBaseUI = styled('div')`
   position: absolute;
   top: 0;
   left: 0;
+  will-change: transform;
 
   &:before {
     color: currentColor;
     font-size: 11px;
     padding-top: 2px;
     padding-left: 2px;
+    will-change: contents;
   }
 
   ${({color}) => `
