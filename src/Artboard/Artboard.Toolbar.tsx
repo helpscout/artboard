@@ -1,5 +1,6 @@
 import * as React from 'react'
 import styled from '@helpscout/fancy'
+import Base from '../UI/Base'
 import {cx} from '../utils'
 
 export class Toolbar extends React.PureComponent<any> {
@@ -12,12 +13,9 @@ export class Toolbar extends React.PureComponent<any> {
   }
 }
 
-const ToolbarUI = styled('div')`
+const ToolbarUI = styled(Base)`
   align-items: center;
   display: flex;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial,
-    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  font-size: 11px;
   line-height: 1;
   justify-content: center;
   flex-direction: column;

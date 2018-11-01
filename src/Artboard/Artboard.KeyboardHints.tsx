@@ -1,5 +1,6 @@
 import * as React from 'react'
 import styled from '@helpscout/fancy'
+import Base from '../UI/Base'
 
 export class KeyboardHints extends React.PureComponent<any> {
   render() {
@@ -22,12 +23,9 @@ export class KeyboardHints extends React.PureComponent<any> {
   }
 }
 
-const KeyboardHintsUI = styled('div')`
+const KeyboardHintsUI = styled(Base)`
   align-items: center;
   display: flex;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial,
-    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  font-size: 11px;
   line-height: 1;
   justify-content: center;
   flex-direction: column;

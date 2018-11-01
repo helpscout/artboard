@@ -6,7 +6,10 @@ import {noop} from '../utils'
 export class Eyedropper extends React.Component {
   static defaultProps = {
     __debug: false,
+    isActive: true,
     onPickColor: noop,
+    onStart: noop,
+    onStop: noop,
   }
 
   state = {
@@ -16,6 +19,7 @@ export class Eyedropper extends React.Component {
     mouseY: 0,
     bodyOffsetX: 0,
     bodyOffsetY: 0,
+    isProcessing: false,
   }
 
   _isMounted = false
@@ -35,9 +39,13 @@ export class Eyedropper extends React.Component {
     this.closePreview()
   }
 
-  safeSetState = state => {
+  safeSetState = (state, callback) => {
     if (!this._isMounted) return
-    this.setState(state)
+    this.setState(state, props => {
+      if (callback && typeof callback === 'function') {
+        callback(props)
+      }
+    })
   }
 
   colorPreview = event => {
@@ -60,6 +68,8 @@ export class Eyedropper extends React.Component {
 
   closePreview = event => {
     document.body.style.cursor = null
+
+    this.props.onStop(this.state.color)
 
     this.safeSetState({
       color: undefined,
@@ -91,21 +101,36 @@ export class Eyedropper extends React.Component {
     this.closePreview()
   }
 
-  startPreviewMode = event => {
+  startPreviewMode = (event = {x: 0, y: 0}) => {
+    if (!this.props.isActive) return
+    if (this.state.isProcessing) return
+
     const {x, y} = event
 
-    html2canvas(document.body, {
-      logging: this.props.__debug,
-    }).then(canvas => {
-      document.body.style.cursor = 'none'
+    this.props.onStart()
 
-      this.safeSetState({
-        canvas,
-        isInPreviewMode: true,
-        mouseX: x,
-        mouseY: y,
-      })
-    })
+    this.safeSetState(
+      {
+        isProcessing: true,
+      },
+      () => {
+        html2canvas(document.body, {
+          logging: this.props.__debug,
+        }).then(canvas => {
+          document.body.style.cursor = 'none'
+
+          this.props.onReady()
+
+          this.safeSetState({
+            canvas,
+            isInPreviewMode: true,
+            isProcessing: false,
+            mouseX: x,
+            mouseY: y,
+          })
+        })
+      },
+    )
   }
 
   render() {

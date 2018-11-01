@@ -3,6 +3,7 @@ import ActionTypes from './Artboard.ActionTypes'
 
 export const initialState = {
   isPerformingAction: false,
+  isEyeDropperActive: false,
   isKeyDown: false,
   isMoving: undefined,
   isZooming: undefined,
@@ -14,6 +15,9 @@ export const initialState = {
   withResponsiveWidth: false,
   zoomLevel: 1,
 }
+
+let _showGuides = initialState.showGuides
+let _zoomLevel = initialState.zoomLevel
 
 const reducer = (state: State = initialState, action: Action) => {
   switch (action.type) {
@@ -93,6 +97,25 @@ const reducer = (state: State = initialState, action: Action) => {
     case ActionTypes.TOGGLE_BOX_INSPECTOR:
       return {
         showBoxInspector: !state.showBoxInspector,
+      }
+
+    case ActionTypes.EYEDROPPER_START:
+      _showGuides = state.showGuides
+      _zoomLevel = state.zoomLevel
+      return {
+        isEyeDropperActive: true,
+        showGuides: false,
+        zoomLevel: 1,
+      }
+
+    case ActionTypes.EYEDROPPER_READY:
+      return {}
+
+    case ActionTypes.EYEDROPPER_STOP:
+      return {
+        isEyeDropperActive: false,
+        showGuides: _showGuides,
+        zoomLevel: _zoomLevel,
       }
 
     case ActionTypes.RESET:

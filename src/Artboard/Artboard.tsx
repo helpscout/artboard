@@ -6,6 +6,7 @@ import Toolbar from './Artboard.Toolbar'
 import reducer, {initialState} from './Artboard.reducer'
 import Zoom from './Artboard.Zoom'
 import BoxInspector from '../BoxInspector'
+import Eyedropper from '../Eyedropper'
 import Resizer from '../Resizer'
 import GuideProvider from '../GuideProvider'
 import GuideContainer from '../GuideContainer'
@@ -252,6 +253,20 @@ export class Artboard extends React.Component<Props, State> {
     this.setStateWithReducer({type: ActionTypes.TOGGLE_BOX_INSPECTOR})
   }
 
+  startEyeDropper = () => {
+    this.setStateWithReducer({type: ActionTypes.EYEDROPPER_START})
+  }
+
+  readyEyeDropper = () => {
+    this.setStateWithReducer({type: ActionTypes.PERFORM_ACTION_START})
+    this.setStateWithReducer({type: ActionTypes.EYEDROPPER_READY})
+  }
+
+  stopEyeDropper = () => {
+    this.setStateWithReducer({type: ActionTypes.PERFORM_ACTION_END})
+    this.setStateWithReducer({type: ActionTypes.EYEDROPPER_STOP})
+  }
+
   renderToolbar = () => {
     const {showBoxInspector, showGuides} = this.state
     return (
@@ -268,6 +283,11 @@ export class Artboard extends React.Component<Props, State> {
             label="Box Inspector"
             icon="Box"
             isActive={showBoxInspector}
+          />
+          <ToolbarButton
+            onClick={this.startEyeDropper}
+            label="Color"
+            icon="EyeDropper"
           />
         </Toolbar>
       </ToolbarWrapperUI>
@@ -322,11 +342,16 @@ export class Artboard extends React.Component<Props, State> {
 
   render() {
     const {alignHorizontally, alignVertically, children} = this.props
-    const {showGuides, showBoxInspector} = this.state
+    const {showGuides, showBoxInspector, isEyeDropperActive} = this.state
 
     return (
       <GuideProvider showGuide={showGuides}>
         <ArtboardWrapperUI className={cx('ArtboardWrapper')} {...this.state}>
+          <Eyedropper
+            isActive={isEyeDropperActive}
+            onReady={this.readyEyeDropper}
+            onStop={this.stopEyeDropper}
+          />
           {this.renderToolbar()}
           <ArtboardUI {...this.state} className={cx('Artboard')}>
             <ContentUI

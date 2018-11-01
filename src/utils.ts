@@ -4,6 +4,7 @@ type CSSNumberValue = string
 export const Keys = {
   Z: 90,
   SPACE: 32,
+  C: 67,
 }
 
 export function noop() {

@@ -22,6 +22,7 @@ export interface Props {
 
 export interface State {
   isPerformingAction: boolean
+  isEyeDropperActive: boolean
   isKeyDown: boolean
   isMoving: 'start' | 'dragging' | undefined
   isZooming: 'in' | 'out' | undefined

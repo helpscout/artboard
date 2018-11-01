@@ -1,5 +1,7 @@
 import * as React from 'react'
 import styled from '@helpscout/fancy'
+import Base from '../UI/Base'
+import Button from '../UI/Button'
 import {noop} from '../utils'
 
 export interface Props {
@@ -27,23 +29,23 @@ export class Zoom extends React.PureComponent<Props> {
     return (
       <ZoomUI>
         <ZoomActionsUI>
-          <button
+          <Button
             onClick={onZoomOut}
             title="Zoom in"
             tabIndex={-1}
             onKeyDown={this.handleOnKeyDown}
           >
             -
-          </button>
+          </Button>
           <ZoomLevelUI>{zoomPercentage}</ZoomLevelUI>
-          <button
+          <Button
             onClick={onZoomIn}
             title="Zoom out"
             tabIndex={-1}
             onKeyDown={this.handleOnKeyDown}
           >
             +
-          </button>
+          </Button>
         </ZoomActionsUI>
         <ZoomTextUI>Zoom</ZoomTextUI>
       </ZoomUI>
@@ -51,11 +53,9 @@ export class Zoom extends React.PureComponent<Props> {
   }
 }
 
-const ZoomUI = styled('div')`
+const ZoomUI = styled(Base)`
   align-items: center;
   display: flex;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial,
-    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   justify-content: center;
   flex-direction: column;
   pointer-events: none;
