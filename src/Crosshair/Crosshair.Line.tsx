@@ -13,7 +13,8 @@ export class Line extends React.PureComponent<any> {
   }
 
   getCenterCoords = () => {
-    const {innerHeight, innerWidth} = window
+    // @ts-ignore
+    const {innerHeight, innerWidth} = document.defaultView
 
     return {
       x: Math.round(innerWidth / 2),
