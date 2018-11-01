@@ -1,7 +1,7 @@
 import React from 'react'
 import html2canvas from 'html2canvas'
 import styled from '@helpscout/fancy'
-import {noop} from '../utils'
+import {noop, Keys} from '../utils'
 
 export class Eyedropper extends React.Component {
   static defaultProps = {
@@ -9,6 +9,7 @@ export class Eyedropper extends React.Component {
     isActive: true,
     onPickColor: noop,
     onStart: noop,
+    onReady: noop,
     onStop: noop,
   }
 
@@ -48,44 +49,6 @@ export class Eyedropper extends React.Component {
     })
   }
 
-  colorPreview = event => {
-    if (!this.state.canvas) return
-    const {x, y} = event
-    const color = getColorFromCanvas(this.state.canvas, x, y)
-
-    this.safeSetState({
-      color,
-      mouseX: x,
-      mouseY: y,
-    })
-  }
-
-  handleOnKeyUp = event => {
-    if (event.keyCode === 27) {
-      this.closePreview()
-    }
-  }
-
-  closePreview = event => {
-    document.body.style.cursor = null
-
-    this.props.onStop(this.state.color)
-
-    this.safeSetState({
-      color: undefined,
-      isInPreviewMode: false,
-    })
-  }
-
-  copyColorToClipboard = () => {
-    const el = document.createElement('textarea')
-    el.value = this.state.color
-    document.body.appendChild(el)
-    el.select()
-    document.execCommand('copy')
-    document.body.removeChild(el)
-  }
-
   handleOnClick = event => {
     if (!this.state.isInPreviewMode) {
       this.startPreviewMode(event)
@@ -94,11 +57,10 @@ export class Eyedropper extends React.Component {
     }
   }
 
-  stopPreviewMode = () => {
-    this.copyColorToClipboard()
-    console.log(`Selected color ${this.state.color}`)
-
-    this.closePreview()
+  handleOnKeyUp = event => {
+    if (event.keyCode === Keys.ESC) {
+      this.closePreview()
+    }
   }
 
   startPreviewMode = (event = {x: 0, y: 0}) => {
@@ -131,6 +93,45 @@ export class Eyedropper extends React.Component {
         })
       },
     )
+  }
+
+  stopPreviewMode = () => {
+    this.copyColorToClipboard()
+    console.log(`Selected color ${this.state.color}`)
+
+    this.closePreview()
+  }
+
+  closePreview = event => {
+    document.body.style.cursor = null
+
+    this.props.onStop(this.state.color)
+
+    this.safeSetState({
+      color: undefined,
+      isInPreviewMode: false,
+    })
+  }
+
+  colorPreview = event => {
+    if (!this.state.canvas) return
+    const {x, y} = event
+    const color = getColorFromCanvas(this.state.canvas, x, y)
+
+    this.safeSetState({
+      color,
+      mouseX: x,
+      mouseY: y,
+    })
+  }
+
+  copyColorToClipboard = () => {
+    const el = document.createElement('textarea')
+    el.value = this.state.color
+    document.body.appendChild(el)
+    el.select()
+    document.execCommand('copy')
+    document.body.removeChild(el)
   }
 
   render() {

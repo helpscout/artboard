@@ -8,7 +8,7 @@ export interface Props {
   label: string
   icon: string
   isActive: boolean
-  onClick: () => void
+  onClick: (event: Event) => void
 }
 
 export class ToolbarButton extends React.PureComponent<Props> {

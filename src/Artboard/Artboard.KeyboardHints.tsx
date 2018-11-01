@@ -7,7 +7,7 @@ export class KeyboardHints extends React.PureComponent<any> {
     return (
       <KeyboardHintsUI>
         <KeyboardHintsActionsUI>
-          <div>Keyboard (Hold):</div>
+          <div>Keyboard:</div>
           <div>
             <strong>Z</strong>: Zoom In
           </div>
@@ -16,6 +16,12 @@ export class KeyboardHints extends React.PureComponent<any> {
           </div>
           <div>
             <strong>Space</strong>: Drag
+          </div>
+          <div>
+            <strong>X</strong>: Toggle Crosshair
+          </div>
+          <div>
+            <strong>Backspace</strong>: Clear Crosshairs
           </div>
         </KeyboardHintsActionsUI>
       </KeyboardHintsUI>

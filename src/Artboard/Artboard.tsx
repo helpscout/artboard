@@ -6,6 +6,7 @@ import Toolbar from './Artboard.Toolbar'
 import reducer, {initialState} from './Artboard.reducer'
 import Zoom from './Artboard.Zoom'
 import BoxInspector from '../BoxInspector'
+import Crosshair from '../Crosshair'
 import Eyedropper from '../Eyedropper'
 import Resizer from '../Resizer'
 import GuideProvider from '../GuideProvider'
@@ -37,6 +38,7 @@ export class Artboard extends React.Component<Props, State> {
     posY: 0,
     showGuides: true,
     showBoxInspector: false,
+    snapshots: [],
     withCrosshair: true,
     zoomLevel: 1,
   }
@@ -53,6 +55,7 @@ export class Artboard extends React.Component<Props, State> {
       showBoxInspector,
       width,
       height,
+      snapshots,
       zoomLevel,
     } = props
 
@@ -65,6 +68,7 @@ export class Artboard extends React.Component<Props, State> {
       posY,
       showGuides,
       showBoxInspector,
+      snapshots,
       zoomLevel,
       artboardHeight: height,
       artboardWidth: width,
@@ -144,6 +148,7 @@ export class Artboard extends React.Component<Props, State> {
 
     switch (event.keyCode) {
       case Keys.Z:
+        this.stopCrosshair()
         if (event.altKey) {
           this.prepareZoomOut()
         } else {
@@ -151,6 +156,7 @@ export class Artboard extends React.Component<Props, State> {
         }
         break
       case Keys.SPACE:
+        this.stopCrosshair()
         this.prepareMove()
         break
       default:
@@ -164,8 +170,24 @@ export class Artboard extends React.Component<Props, State> {
         this.setStateWithReducer({type: ActionTypes.ZOOM_RESET})
         break
 
+      case Keys.X:
+        if (!isInputNode(event.target)) {
+          this.toggleCrosshair()
+        }
+        break
+
       case Keys.SPACE:
         this.setStateWithReducer({type: ActionTypes.MOVE_END})
+        break
+
+      case Keys.ESC:
+        this.stopCrosshair()
+        break
+
+      case Keys.BACKSPACE:
+        if (!isInputNode(event.target)) {
+          this.clearSnapshots()
+        }
         break
 
       default:
@@ -289,15 +311,18 @@ export class Artboard extends React.Component<Props, State> {
     }
   }
 
-  toggleGuides = () => {
+  toggleGuides = event => {
+    event.stopPropagation()
     this.setStateWithReducer({type: ActionTypes.TOGGLE_GUIDES})
   }
 
-  toggleBoxInspector = () => {
+  toggleBoxInspector = event => {
+    event.stopPropagation()
     this.setStateWithReducer({type: ActionTypes.TOGGLE_BOX_INSPECTOR})
   }
 
   startEyeDropper = () => {
+    this.setStateWithReducer({type: ActionTypes.CROSSHAIR_END})
     this.setStateWithReducer({type: ActionTypes.EYEDROPPER_START})
   }
 
@@ -311,12 +336,51 @@ export class Artboard extends React.Component<Props, State> {
     this.setStateWithReducer({type: ActionTypes.EYEDROPPER_STOP})
   }
 
-  resetSettings = () => {
+  toggleCrosshair = (event?: Event) => {
+    if (event) {
+      event.stopPropagation()
+    }
+
+    if (this.state.isCrosshairActive) {
+      this.stopCrosshair()
+    } else {
+      this.setStateWithReducer({type: ActionTypes.PERFORM_ACTION_START})
+      this.setStateWithReducer({type: ActionTypes.CROSSHAIR_START})
+    }
+  }
+
+  stopCrosshair = () => {
+    if (this.state.isCrosshairActive) {
+      this.setStateWithReducer({type: ActionTypes.PERFORM_ACTION_END})
+      this.setStateWithReducer({type: ActionTypes.CROSSHAIR_END})
+    }
+  }
+
+  addSnapshot = snapshot => {
+    this.setStateWithReducer({
+      type: ActionTypes.CROSSHAIR_ADD_SNAPSHOT,
+      payload: {
+        snapshot,
+      },
+    })
+  }
+
+  handleClearSnapshots = event => {
+    event.stopPropagation()
+    this.clearSnapshots()
+  }
+
+  clearSnapshots = () => {
+    this.setStateWithReducer({type: ActionTypes.CROSSHAIR_CLEAR})
+  }
+
+  resetSettings = event => {
+    event.stopPropagation()
     this.setStateWithReducer({type: ActionTypes.RESET})
   }
 
   renderToolbar = () => {
-    const {showBoxInspector, showGuides} = this.state
+    const {showBoxInspector, showGuides, isCrosshairActive} = this.state
     return (
       <ToolbarWrapperUI>
         <Toolbar>
@@ -337,7 +401,18 @@ export class Artboard extends React.Component<Props, State> {
             label="Color"
             icon="EyeDropper"
           />
+          <ToolbarButton
+            onClick={this.toggleCrosshair}
+            label="Crosshair"
+            icon="Crosshair"
+            isActive={isCrosshairActive}
+          />
           <ToolbarRightUI>
+            <ToolbarButton
+              onClick={this.handleClearSnapshots}
+              label="Clear Crosshairs"
+              icon="Eraser"
+            />
             <ToolbarButton
               onClick={this.resetSettings}
               label="Reset"
@@ -397,11 +472,24 @@ export class Artboard extends React.Component<Props, State> {
 
   render() {
     const {alignHorizontally, alignVertically, children} = this.props
-    const {showGuides, showBoxInspector, isEyeDropperActive} = this.state
+    const {
+      showGuides,
+      showBoxInspector,
+      isCrosshairActive,
+      isEyeDropperActive,
+      snapshots,
+      showSnapshots,
+    } = this.state
 
     return (
       <GuideProvider showGuide={showGuides}>
         <ArtboardWrapperUI className={cx('ArtboardWrapper')} {...this.state}>
+          <Crosshair
+            isActive={isCrosshairActive}
+            showSnapshots={showSnapshots}
+            snapshots={snapshots}
+            onSnapshot={this.addSnapshot}
+          />
           <Eyedropper
             isActive={isEyeDropperActive}
             onReady={this.readyEyeDropper}

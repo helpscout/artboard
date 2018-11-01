@@ -3,8 +3,11 @@ type CSSNumberValue = string
 
 export const Keys = {
   Z: 90,
-  SPACE: 32,
+  X: 88,
   C: 67,
+  SPACE: 32,
+  ESC: 27,
+  BACKSPACE: 8,
 }
 
 export function noop() {

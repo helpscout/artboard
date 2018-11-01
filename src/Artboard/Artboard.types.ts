@@ -1,3 +1,5 @@
+import {Snapshots} from '../Crosshair/Crosshair'
+
 export interface Props {
   __debug: boolean
   alignHorizontally: 'left' | 'center' | 'right'
@@ -16,6 +18,7 @@ export interface Props {
   maxWidth?: number
   posX: number
   posY: number
+  snapshots: Snapshots
   withResponsiveHeight: boolean
   withResponsiveWidth: boolean
   withCrosshair: boolean
@@ -26,12 +29,15 @@ export interface State {
   artboardHeight: number
   artboardWidth: number
   isPerformingAction: boolean
+  isCrosshairActive: boolean
   isEyeDropperActive: boolean
   isKeyDown: boolean
   isMoving: 'start' | 'dragging' | undefined
   isZooming: 'in' | 'out' | undefined
   showGuides: boolean
   showBoxInspector: boolean
+  showSnapshots: boolean
+  snapshots: Snapshots
   posX: number
   posY: number
   zoomLevel: number

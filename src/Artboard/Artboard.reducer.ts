@@ -5,6 +5,7 @@ export const initialState = {
   artboardHeight: 400,
   artboardWidth: 400,
   isPerformingAction: false,
+  isCrosshairActive: false,
   isEyeDropperActive: false,
   isKeyDown: false,
   isMoving: undefined,
@@ -13,12 +14,16 @@ export const initialState = {
   posY: 0,
   showGuides: true,
   showBoxInspector: false,
+  showSnapshots: true,
   withResponsiveHeight: false,
   withResponsiveWidth: false,
+  snapshots: [],
   zoomLevel: 1,
 }
 
 let _showGuides = initialState.showGuides
+let _showSnapshots = initialState.showSnapshots
+let _showBoxInspector = initialState.showBoxInspector
 let _zoomLevel = initialState.zoomLevel
 let _posX = initialState.posX
 let _posY = initialState.posY
@@ -137,6 +142,8 @@ const reducer = (state: State = initialState, action: Action) => {
       _posX = state.posX
       _posY = state.posY
       _showGuides = state.showGuides
+      _showSnapshots = state.showSnapshots
+      _showBoxInspector = state.showBoxInspector
       _zoomLevel = state.zoomLevel
 
       return {
@@ -144,6 +151,8 @@ const reducer = (state: State = initialState, action: Action) => {
         posX: 0,
         posY: 0,
         showGuides: false,
+        showSnapshots: false,
+        showBoxInspector: false,
         zoomLevel: 1,
       }
 
@@ -156,7 +165,40 @@ const reducer = (state: State = initialState, action: Action) => {
         posX: _posX,
         posY: _posY,
         showGuides: _showGuides,
+        showBoxInspector: _showBoxInspector,
+        showSnapshots: _showSnapshots,
         zoomLevel: _zoomLevel,
+      }
+
+    case ActionTypes.CROSSHAIR_START:
+      return {
+        isCrosshairActive: true,
+        showSnapshots: true,
+      }
+
+    case ActionTypes.CROSSHAIR_END:
+      return {
+        isCrosshairActive: false,
+      }
+
+    case ActionTypes.CROSSHAIR_ADD_SNAPSHOT:
+      return {
+        snapshots: [...state.snapshots, action.payload.snapshot],
+      }
+
+    case ActionTypes.CROSSHAIR_SHOW_SNAPSHOTS:
+      return {
+        showSnapshots: true,
+      }
+
+    case ActionTypes.CROSSHAIR_HIDE_SNAPSHOTS:
+      return {
+        showSnapshots: false,
+      }
+
+    case ActionTypes.CROSSHAIR_CLEAR:
+      return {
+        snapshots: [],
       }
 
     default:

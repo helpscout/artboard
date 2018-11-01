@@ -6,7 +6,7 @@ import {noop} from '../../utils'
 
 export interface Props {
   children?: any
-  onClick: () => void
+  onClick: (event: Event) => void
   isActive: boolean
   icon?: string
   label: string
