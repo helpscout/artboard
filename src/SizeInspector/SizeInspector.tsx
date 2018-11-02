@@ -2,6 +2,7 @@ import * as React from 'react'
 
 export interface Props {
   color: string
+  offsetColor: string
   showOutlines: boolean
   targetSelector: string
   zoomLevel: number
@@ -13,6 +14,7 @@ const SIZE_NODE_SELECTOR = `.${SIZE_NODE_CLASSNAME}`
 export class SizeInspector extends React.PureComponent<Props> {
   static defaultProps = {
     color: 'fuchsia',
+    offsetColor: 'orange',
     targetSelector: '*',
     showOutlines: true,
     zoomLevel: 1,
@@ -103,7 +105,7 @@ export class SizeInspector extends React.PureComponent<Props> {
   }
 
   createSizeNode = (targetNode: HTMLElement): HTMLElement => {
-    const {color, zoomLevel} = this.props
+    const {color, offsetColor, zoomLevel} = this.props
     const sizeNode = document.createElement('div')
     const parentNode = targetNode.offsetParent
     const rect = targetNode.getBoundingClientRect()
@@ -201,6 +203,7 @@ export class SizeInspector extends React.PureComponent<Props> {
 
     setNodeStyles(topDistanceNode, {
       ...alignCenterStyles,
+      color: offsetColor,
       backgroundColor: 'currentColor',
       width: '1px',
       height: `${values.offsetTop * zoomLevel}px`,
@@ -211,6 +214,7 @@ export class SizeInspector extends React.PureComponent<Props> {
 
     setNodeStyles(leftDistanceNode, {
       boxSizing: 'border-box',
+      color: offsetColor,
       backgroundColor: 'currentColor',
       height: '1px',
       width: `${values.offsetLeft * zoomLevel}px`,
@@ -221,6 +225,7 @@ export class SizeInspector extends React.PureComponent<Props> {
 
     setNodeStyles(rightDistanceNode, {
       boxSizing: 'border-box',
+      color: offsetColor,
       backgroundColor: 'currentColor',
       height: '1px',
       width: `${values.offsetRight * zoomLevel}px`,
@@ -231,6 +236,7 @@ export class SizeInspector extends React.PureComponent<Props> {
 
     setNodeStyles(bottomDistanceNode, {
       ...alignCenterStyles,
+      color: offsetColor,
       backgroundColor: 'currentColor',
       width: '1px',
       height: `${values.offsetBottom * zoomLevel}px`,
