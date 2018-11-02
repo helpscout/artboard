@@ -1,25 +1,18 @@
 import * as React from 'react'
 import styled from '@helpscout/fancy'
+import {getValueFromProps} from './Crosshair'
 
 export class Line extends React.PureComponent<any> {
   static defaultProps = {
+    centerCoords: {x: 0, y: 0},
     color: 'cyan',
     coordinate: 'x',
     opacity: 1,
+    isActive: false,
     posX: 0,
     posY: 0,
     x: 0,
     y: 0,
-  }
-
-  getCenterCoords = () => {
-    // @ts-ignore
-    const {innerHeight, innerWidth} = document.defaultView
-
-    return {
-      x: Math.round(innerWidth / 2),
-      y: Math.round(innerHeight / 2),
-    }
   }
 
   isX = () => {
@@ -31,17 +24,38 @@ export class Line extends React.PureComponent<any> {
   }
 
   getValue = (): number => {
-    const {posX, posY, x, y} = this.props
+    const {isActive, centerCoords, x, y, posX, posY, zoomLevel} = this.props
 
-    const value = this.isX() ? posY + y : posX + x
+    let value = this.isX() ? posY + y : posX + x
+
+    if (!isActive) {
+      if (this.isX()) {
+        value =
+          (centerCoords.y - y) * zoomLevel * -1 +
+          centerCoords.y +
+          posY * zoomLevel
+      } else {
+        value =
+          (centerCoords.x - x) * zoomLevel * -1 +
+          centerCoords.x +
+          posX * zoomLevel
+      }
+    }
 
     return value
   }
 
   getStyles = () => {
-    const value = this.getValue()
+    const values = getValueFromProps(this.props)
+    let value
 
-    let transform = this.isX()
+    if (this.isX()) {
+      value = values.x
+    } else {
+      value = values.y
+    }
+
+    const transform = this.isX()
       ? `translateY(${value}px)`
       : `translateX(${value}px)`
 

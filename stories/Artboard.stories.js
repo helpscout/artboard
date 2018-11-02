@@ -63,6 +63,27 @@ stories.add('zoomLevel', () => (
   </Artboard>
 ))
 
+stories.add('snapshots', () => (
+  <Artboard
+    minHeight={193}
+    minWidth={360}
+    zoomLevel={1}
+    snapshots={[{y: 354, x: 979}]}
+  >
+    <div
+      style={{
+        boxSizing: 'border-box',
+        background: '#eee',
+        padding: 20,
+        minHeight: 193,
+      }}
+    >
+      <OptionTileGuides />
+      <OptionTile />
+    </div>
+  </Artboard>
+))
+
 stories.add('Guides (Components)', () => (
   <Artboard
     withResponsiveWidth

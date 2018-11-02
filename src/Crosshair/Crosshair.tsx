@@ -25,6 +25,10 @@ export interface Props {
 }
 
 export interface State {
+  centerCoords: {
+    x: number
+    y: number
+  }
   isActive: boolean
   x: number
   y: number
@@ -48,6 +52,7 @@ export class Crosshair extends React.PureComponent<Props, State> {
     super(props)
 
     this.state = {
+      centerCoords: this.getCenterCoords(),
       isActive: props.isActive,
       x: 0,
       y: 0,
@@ -77,6 +82,16 @@ export class Crosshair extends React.PureComponent<Props, State> {
       this.setState({
         snapshots: nextProps.snapshots,
       })
+    }
+  }
+
+  getCenterCoords = (): {x: number; y: number} => {
+    // @ts-ignore
+    const {innerHeight, innerWidth} = document.defaultView
+
+    return {
+      x: Math.round(innerWidth / 2),
+      y: Math.round(innerHeight / 2),
     }
   }
 
@@ -121,15 +136,23 @@ export class Crosshair extends React.PureComponent<Props, State> {
     })
   }
 
-  renderSnapshots = () => {
-    const {
+  getLineProps = () => {
+    const {color, posX, posY, snapshotOpacity, zoomLevel} = this.props
+    const {centerCoords} = this.state
+
+    return {
+      centerCoords,
       color,
       posX,
       posY,
-      showSnapshots,
+      opacity: snapshotOpacity,
       snapshotOpacity,
       zoomLevel,
-    } = this.props
+    }
+  }
+
+  renderSnapshots = () => {
+    const {showSnapshots} = this.props
     const {snapshots} = this.state
 
     if (!showSnapshots) return null
@@ -140,22 +163,20 @@ export class Crosshair extends React.PureComponent<Props, State> {
       return (
         <div key={`snap-${index}`}>
           <Line
-            color={color}
-            className={cx('CrosshairLineXSnap')}
-            y={y}
-            posY={posY}
-            coordinate="x"
-            opacity={snapshotOpacity}
-            zoomLevel={zoomLevel}
+            {...{
+              ...this.getLineProps(),
+              className: cx('CrosshairLineXSnap'),
+              coordinate: 'x',
+              y,
+            }}
           />
           <Line
-            color={color}
-            className={cx('CrosshairLineYSnap')}
-            x={x}
-            posX={posX}
-            coordinate="y"
-            opacity={snapshotOpacity}
-            zoomLevel={zoomLevel}
+            {...{
+              ...this.getLineProps(),
+              className: cx('CrosshairLineYSnap'),
+              coordinate: 'y',
+              x,
+            }}
           />
         </div>
       )
@@ -163,7 +184,7 @@ export class Crosshair extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const {color, style} = this.props
+    const {style} = this.props
     const {x, y, isActive} = this.state
 
     return (
@@ -171,18 +192,26 @@ export class Crosshair extends React.PureComponent<Props, State> {
         {isActive && (
           <div>
             <Line
-              color={color}
-              className={cx('CrosshairLineX')}
-              y={y}
-              posY={0}
-              coordinate="x"
+              {...{
+                ...this.getLineProps(),
+                className: cx('CrosshairLineX'),
+                coordinate: 'x',
+                isActive: true,
+                y,
+                opacity: 1,
+                posY: 0,
+              }}
             />
             <Line
-              color={color}
-              className={cx('CrosshairLineY')}
-              x={x}
-              posX={0}
-              coordinate="y"
+              {...{
+                ...this.getLineProps(),
+                className: cx('CrosshairLineY'),
+                coordinate: 'y',
+                isActive: true,
+                x,
+                opacity: 1,
+                posX: 0,
+              }}
             />
           </div>
         )}
@@ -205,5 +234,23 @@ const CrosshairUI = styled(Base)`
     pointer-events: none;
   }
 `
+
+export const getValueFromProps = (props): {x: number; y: number} => {
+  const {isActive, centerCoords, x, y, posX, posY, zoomLevel} = props
+  let computedX = posY + y
+  let computedY = posX + x
+
+  if (!isActive) {
+    computedX =
+      (centerCoords.y - y) * zoomLevel * -1 + centerCoords.y + posY * zoomLevel
+    computedY =
+      (centerCoords.x - x) * zoomLevel * -1 + centerCoords.x + posX * zoomLevel
+  }
+
+  return {
+    x: computedX,
+    y: computedY,
+  }
+}
 
 export default Crosshair
