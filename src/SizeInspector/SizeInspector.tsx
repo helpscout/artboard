@@ -307,7 +307,9 @@ export class SizeInspector extends React.PureComponent<Props> {
   setNodeRef = node => (this.node = node)
 
   render() {
-    return <div ref={this.setNodeRef} {...this.props} />
+    const {children} = this.props
+
+    return <div ref={this.setNodeRef} children={children} />
   }
 }
 
