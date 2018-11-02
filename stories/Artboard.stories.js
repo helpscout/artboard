@@ -48,7 +48,7 @@ stories.add('Session Storage', () => (
 ))
 
 stories.add('zoomLevel', () => (
-  <Artboard minHeight={193} minWidth={360} zoomLevel={2}>
+  <Artboard minHeight={193} minWidth={360} zoomLevel={2} id="session-zoom">
     <div
       style={{
         boxSizing: 'border-box',

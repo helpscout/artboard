@@ -38,7 +38,7 @@ const KeyboardHintsUI = styled(Base)`
   opacity: 0.3;
   pointer-events: none;
   transform: translateZ(0);
-  z-index: 999999;
+  z-index: 2147483647;
 `
 
 const KeyboardHintsActionsUI = styled('div')`

@@ -112,7 +112,7 @@ export const GenericToolBarUI = styled('div')`
   pointer-events: none;
   transform: translateZ(0);
   width: 100%;
-  z-index: 3;
+  z-index: 2147483647;
 `
 
 export const ZoomWrapperUI = styled(GenericToolBarUI)`

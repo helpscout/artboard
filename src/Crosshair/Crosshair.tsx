@@ -9,6 +9,13 @@ export type Snapshot = {
   y: number
 }
 
+export type ViewportCoordinates = {
+  height: number
+  width: number
+  x: number
+  y: number
+}
+
 export type Snapshots = Array<Snapshot>
 
 export interface Props {
@@ -25,10 +32,7 @@ export interface Props {
 }
 
 export interface State {
-  centerCoords: {
-    x: number
-    y: number
-  }
+  centerCoords: ViewportCoordinates
   isActive: boolean
   x: number
   y: number
@@ -64,12 +68,14 @@ export class Crosshair extends React.PureComponent<Props, State> {
     window.addEventListener('mousemove', this.setCoordinates)
     window.addEventListener('click', this.addSnapshot)
     window.addEventListener('keyup', this.stopCrosshair)
+    window.addEventListener('resize', this.setCenterCoords)
   }
 
   componentWillUnmount() {
     window.removeEventListener('mousemove', this.setCoordinates)
     window.removeEventListener('click', this.addSnapshot)
     window.removeEventListener('keyup', this.stopCrosshair)
+    window.removeEventListener('resize', this.setCenterCoords)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -85,14 +91,22 @@ export class Crosshair extends React.PureComponent<Props, State> {
     }
   }
 
-  getCenterCoords = (): {x: number; y: number} => {
+  getCenterCoords = (): ViewportCoordinates => {
     // @ts-ignore
     const {innerHeight, innerWidth} = document.defaultView
 
     return {
+      height: innerHeight,
+      width: innerWidth,
       x: Math.round(innerWidth / 2),
       y: Math.round(innerHeight / 2),
     }
+  }
+
+  setCenterCoords = () => {
+    this.setState({
+      centerCoords: this.getCenterCoords(),
+    })
   }
 
   handleOnKeyUp = event => {
@@ -111,14 +125,21 @@ export class Crosshair extends React.PureComponent<Props, State> {
   }
 
   addSnapshot = () => {
-    const {posX, posY} = this.props
-    const {isActive, x, y, snapshots} = this.state
+    const {posX, posY, zoomLevel} = this.props
+    const {centerCoords, isActive, x, y, snapshots} = this.state
 
     if (!isActive) return
 
+    const nextX = Math.round(
+      centerCoords.x + (x - centerCoords.x) / zoomLevel - posX,
+    )
+    const nextY = Math.round(
+      centerCoords.y + (y - centerCoords.y) / zoomLevel - posY,
+    )
+
     const snap = {
-      x: x - posX,
-      y: y - posY,
+      x: nextX,
+      y: nextY,
     }
 
     if (this.props.onSnapshot) {
@@ -234,23 +255,5 @@ const CrosshairUI = styled(Base)`
     pointer-events: none;
   }
 `
-
-export const getValueFromProps = (props): {x: number; y: number} => {
-  const {isActive, centerCoords, x, y, posX, posY, zoomLevel} = props
-  let computedX = posY + y
-  let computedY = posX + x
-
-  if (!isActive) {
-    computedX =
-      (centerCoords.y - y) * zoomLevel * -1 + centerCoords.y + posY * zoomLevel
-    computedY =
-      (centerCoords.x - x) * zoomLevel * -1 + centerCoords.x + posX * zoomLevel
-  }
-
-  return {
-    x: computedX,
-    y: computedY,
-  }
-}
 
 export default Crosshair

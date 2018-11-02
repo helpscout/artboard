@@ -60,7 +60,7 @@ const ZoomUI = styled(Base)`
   flex-direction: column;
   pointer-events: none;
   transform: translateZ(0);
-  z-index: 999999;
+  z-index: 2147483647;
 `
 
 const ZoomActionsUI = styled('div')`

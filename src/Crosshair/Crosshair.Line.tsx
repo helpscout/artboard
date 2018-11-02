@@ -1,6 +1,5 @@
 import * as React from 'react'
 import styled from '@helpscout/fancy'
-import {getValueFromProps} from './Crosshair'
 
 export class Line extends React.PureComponent<any> {
   static defaultProps = {
@@ -24,22 +23,13 @@ export class Line extends React.PureComponent<any> {
   }
 
   getValue = (): number => {
-    const {isActive, centerCoords, x, y, posX, posY, zoomLevel} = this.props
+    const values = getValueFromProps(this.props)
+    let value
 
-    let value = this.isX() ? posY + y : posX + x
-
-    if (!isActive) {
-      if (this.isX()) {
-        value =
-          (centerCoords.y - y) * zoomLevel * -1 +
-          centerCoords.y +
-          posY * zoomLevel
-      } else {
-        value =
-          (centerCoords.x - x) * zoomLevel * -1 +
-          centerCoords.x +
-          posX * zoomLevel
-      }
+    if (this.isX()) {
+      value = values.x
+    } else {
+      value = values.y
     }
 
     return value
@@ -118,3 +108,21 @@ const LabelUI = styled('div')`
   padding-left: 2px;
   will-change: contents;
 `
+
+export const getValueFromProps = (props): {x: number; y: number} => {
+  const {isActive, centerCoords, x, y, posX, posY, zoomLevel} = props
+  let computedX = posY + y
+  let computedY = posX + x
+
+  if (!isActive) {
+    computedX =
+      (centerCoords.y - y) * zoomLevel * -1 + centerCoords.y + posY * zoomLevel
+    computedY =
+      (centerCoords.x - x) * zoomLevel * -1 + centerCoords.x + posX * zoomLevel
+  }
+
+  return {
+    x: computedX,
+    y: computedY,
+  }
+}
