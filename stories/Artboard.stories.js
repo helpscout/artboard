@@ -137,10 +137,10 @@ stories.add('Guides (Component + Objects)', () => (
   </Artboard>
 ))
 
-stories.add('Without Crosshair', () => (
+stories.add('Without center guides', () => (
   <Artboard
     withResponsiveWidth
-    withCrosshair={false}
+    withCenterGuides={false}
     guides={[
       <Guide height="20px" top="15px" width="100%" />,
       <Guide height="20px" bottom="15px" width="100%" />,

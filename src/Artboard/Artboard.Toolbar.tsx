@@ -24,7 +24,7 @@ const ToolbarUI = styled(Base)`
 `
 
 const ToolbarContentUI = styled('div')`
-  align-items: center;
+  align-items: flex-start;
   display: flex;
   justify-content: center;
   margin-bottom: 5px;

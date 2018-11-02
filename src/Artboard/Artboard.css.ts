@@ -128,7 +128,7 @@ export const ToolbarWrapperUI = styled(GenericToolBarUI)`
 `
 
 export const ToolbarRightUI = styled('div')`
-  align-items: center;
+  align-items: flex-start;
   display: flex;
   justify-content: center;
   position: absolute;

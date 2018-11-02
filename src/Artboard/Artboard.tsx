@@ -8,6 +8,7 @@ import Zoom from './Artboard.Zoom'
 import BoxInspector from '../BoxInspector'
 import Crosshair from '../Crosshair'
 import Eyedropper from '../Eyedropper'
+import SizeInspector from '../SizeInspector'
 import Resizer from '../Resizer'
 import GuideProvider from '../GuideProvider'
 import GuideContainer from '../GuideContainer'
@@ -39,7 +40,7 @@ export class Artboard extends React.Component<Props, State> {
     showGuides: true,
     showBoxInspector: false,
     snapshots: [],
-    withCrosshair: true,
+    withCenterGuides: true,
     zoomLevel: 1,
   }
 
@@ -154,6 +155,15 @@ export class Artboard extends React.Component<Props, State> {
         } else {
           this.prepareZoomIn()
         }
+        break
+      case Keys.B:
+        this.toggleBoxInspector()
+        break
+      case Keys.G:
+        this.toggleGuides()
+        break
+      case Keys.S:
+        this.toggleSizeInspector()
         break
       case Keys.SPACE:
         this.stopCrosshair()
@@ -317,14 +327,19 @@ export class Artboard extends React.Component<Props, State> {
     }
   }
 
-  toggleGuides = event => {
-    event.stopPropagation()
+  toggleGuides = (event?: Event) => {
+    event && event.stopPropagation()
     this.setStateWithReducer({type: ActionTypes.TOGGLE_GUIDES})
   }
 
-  toggleBoxInspector = event => {
-    event.stopPropagation()
+  toggleBoxInspector = (event?: Event) => {
+    event && event.stopPropagation()
     this.setStateWithReducer({type: ActionTypes.TOGGLE_BOX_INSPECTOR})
+  }
+
+  toggleSizeInspector = (event?: Event) => {
+    event && event.stopPropagation()
+    this.setStateWithReducer({type: ActionTypes.TOGGLE_SIZE_INSPECTOR})
   }
 
   startEyeDropper = () => {
@@ -386,7 +401,12 @@ export class Artboard extends React.Component<Props, State> {
   }
 
   renderToolbar = () => {
-    const {showBoxInspector, showGuides, isCrosshairActive} = this.state
+    const {
+      showBoxInspector,
+      showSizeInspector,
+      showGuides,
+      isCrosshairActive,
+    } = this.state
     return (
       <ToolbarWrapperUI>
         <Toolbar>
@@ -401,6 +421,12 @@ export class Artboard extends React.Component<Props, State> {
             label="Box Inspector"
             icon="Box"
             isActive={showBoxInspector}
+          />
+          <ToolbarButton
+            onClick={this.toggleSizeInspector}
+            label="Size Inspector"
+            icon="Size"
+            isActive={showSizeInspector}
           />
           <ToolbarButton
             onClick={this.startEyeDropper}
@@ -431,7 +457,7 @@ export class Artboard extends React.Component<Props, State> {
   }
 
   renderGuides = () => {
-    const {guides, withCrosshair} = this.props
+    const {guides, withCenterGuides} = this.props
     let guidesMarkup = guides
 
     if (Array.isArray(guides)) {
@@ -456,7 +482,7 @@ export class Artboard extends React.Component<Props, State> {
         zIndex={999999}
       >
         {guidesMarkup}
-        {withCrosshair && [
+        {withCenterGuides && [
           <Guide
             top="50%"
             width="100%"
@@ -489,6 +515,7 @@ export class Artboard extends React.Component<Props, State> {
     const {
       showGuides,
       showBoxInspector,
+      showSizeInspector,
       isCrosshairActive,
       isEyeDropperActive,
       posX,
@@ -533,7 +560,12 @@ export class Artboard extends React.Component<Props, State> {
                 onResize={this.handleOnResize}
               >
                 <BoxInspector showOutlines={showBoxInspector}>
-                  {children}
+                  <SizeInspector
+                    showOutlines={showSizeInspector}
+                    zoomLevel={zoomLevel}
+                  >
+                    {children}
+                  </SizeInspector>
                 </BoxInspector>
               </Resizer>
               {this.renderGuides()}

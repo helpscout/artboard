@@ -21,7 +21,7 @@ export interface Props {
   snapshots: Snapshots
   withResponsiveHeight: boolean
   withResponsiveWidth: boolean
-  withCrosshair: boolean
+  withCenterGuides: boolean
   zoomLevel: number
 }
 
@@ -36,6 +36,7 @@ export interface State {
   isZooming: 'in' | 'out' | undefined
   showGuides: boolean
   showBoxInspector: boolean
+  showSizeInspector: boolean
   showSnapshots: boolean
   snapshots: Snapshots
   posX: number

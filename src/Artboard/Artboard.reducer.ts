@@ -14,6 +14,7 @@ export const initialState = {
   posY: 0,
   showGuides: true,
   showBoxInspector: false,
+  showSizeInspector: false,
   showSnapshots: true,
   withResponsiveHeight: false,
   withResponsiveWidth: false,
@@ -24,6 +25,7 @@ export const initialState = {
 let _showGuides = initialState.showGuides
 let _showSnapshots = initialState.showSnapshots
 let _showBoxInspector = initialState.showBoxInspector
+let _showSizeInspector = initialState.showSizeInspector
 let _zoomLevel = initialState.zoomLevel
 let _posX = initialState.posX
 let _posY = initialState.posY
@@ -142,6 +144,11 @@ const reducer = (state: State = initialState, action: Action) => {
         showBoxInspector: !state.showBoxInspector,
       }
 
+    case ActionTypes.TOGGLE_SIZE_INSPECTOR:
+      return {
+        showSizeInspector: !state.showSizeInspector,
+      }
+
     case ActionTypes.EYEDROPPER_START:
       _posX = state.posX
       _posY = state.posY
@@ -175,14 +182,20 @@ const reducer = (state: State = initialState, action: Action) => {
       }
 
     case ActionTypes.CROSSHAIR_START:
+      _showBoxInspector = state.showBoxInspector
+      _showSizeInspector = state.showSizeInspector
       return {
         isCrosshairActive: true,
         showSnapshots: true,
+        showBoxInspector: false,
+        showSizeInspector: false,
       }
 
     case ActionTypes.CROSSHAIR_END:
       return {
         isCrosshairActive: false,
+        showBoxInspector: _showBoxInspector,
+        showSizeInspector: _showSizeInspector,
       }
 
     case ActionTypes.CROSSHAIR_ADD_SNAPSHOT:

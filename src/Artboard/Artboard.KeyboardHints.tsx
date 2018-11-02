@@ -18,7 +18,16 @@ export class KeyboardHints extends React.PureComponent<any> {
             <strong>Space</strong>: Drag
           </div>
           <div>
-            <strong>X</strong>: Toggle Crosshair
+            <strong>G</strong>: Guides
+          </div>
+          <div>
+            <strong>B</strong>: Box Inspector
+          </div>
+          <div>
+            <strong>S</strong>: Toggle Size Inspector
+          </div>
+          <div>
+            <strong>X</strong>: Crosshair
           </div>
           <div>
             <strong>Backspace</strong>: Clear Crosshairs
