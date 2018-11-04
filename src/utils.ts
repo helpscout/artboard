@@ -34,7 +34,7 @@ export function getPreparedProps(props: Object): Object {
 }
 
 export function cx(className?: string): string {
-  const prefix = 'HSDSUIDevKit'
+  const prefix = 'HSDSArtboard'
   if (!className) return prefix
 
   return `${prefix}-${className}`

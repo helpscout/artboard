@@ -34,6 +34,7 @@ export class BoxInspector extends React.Component<Props> {
   }
 
   bindEvents = () => {
+    if (!this.node) return
     if (!this.props.showOutlines) return
 
     Array.from(this.node.querySelectorAll(this.props.targetSelector)).forEach(
@@ -45,6 +46,8 @@ export class BoxInspector extends React.Component<Props> {
   }
 
   unbindEvents = () => {
+    if (!this.node) return
+
     Array.from(this.node.querySelectorAll(this.props.targetSelector)).forEach(
       node => {
         node.removeEventListener('mouseenter', this.handleOnMouseEnter)
@@ -54,6 +57,8 @@ export class BoxInspector extends React.Component<Props> {
   }
 
   cleanUp = () => {
+    if (!this.node) return
+
     Array.from(this.node.querySelectorAll(this.props.targetSelector)).forEach(
       node => {
         if (node['style']) {

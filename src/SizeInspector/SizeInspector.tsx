@@ -42,6 +42,7 @@ export class SizeInspector extends React.PureComponent<Props> {
   }
 
   bindEvents = () => {
+    if (!this.node) return
     if (!this.props.showOutlines) return
 
     Array.from(this.node.querySelectorAll(this.props.targetSelector)).forEach(
@@ -53,6 +54,8 @@ export class SizeInspector extends React.PureComponent<Props> {
   }
 
   unbindEvents = () => {
+    if (!this.node) return
+
     Array.from(this.node.querySelectorAll(this.props.targetSelector)).forEach(
       node => {
         node.removeEventListener('mouseenter', this.handleOnMouseEnter)

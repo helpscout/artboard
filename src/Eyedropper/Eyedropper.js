@@ -1,7 +1,10 @@
 import React from 'react'
 import html2canvas from 'html2canvas'
 import styled from '@helpscout/fancy'
-import {noop, Keys} from '../utils'
+import {cx, noop, Keys} from '../utils'
+
+const GRID_PATTERN =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAGElEQVQYV2NkYGD4z4ADMEIlQTQGGHSSABNFBwdl5cZ4AAAAAElFTkSuQmCC'
 
 export class Eyedropper extends React.Component {
   static defaultProps = {
@@ -11,9 +14,12 @@ export class Eyedropper extends React.Component {
     onStart: noop,
     onReady: noop,
     onStop: noop,
+    previewSize: 100,
+    previewScale: 5,
   }
 
   state = {
+    canvas: undefined,
     color: undefined,
     isInPreviewMode: false,
     mouseX: 0,
@@ -27,6 +33,7 @@ export class Eyedropper extends React.Component {
 
   componentDidMount() {
     this._isMounted = true
+
     window.addEventListener('click', this.handleOnClick)
     window.addEventListener('mousemove', this.colorPreview)
     window.addEventListener('keyup', this.handleOnKeyUp)
@@ -37,6 +44,7 @@ export class Eyedropper extends React.Component {
     window.removeEventListener('click', this.handleOnClick)
     window.removeEventListener('mousemove', this.colorPreview)
     window.removeEventListener('keyup', this.handleOnKeyUp)
+
     this.closePreview()
   }
 
@@ -80,6 +88,7 @@ export class Eyedropper extends React.Component {
       () => {
         html2canvas(document.body, {
           logging: this.props.__debug,
+          scale: 1,
         }).then(canvas => {
           document.body.style.cursor = 'none'
 
@@ -100,13 +109,11 @@ export class Eyedropper extends React.Component {
   stopPreviewMode = () => {
     this.copyColorToClipboard()
     console.log(`Selected color ${this.state.color}`)
-
     this.closePreview()
   }
 
   closePreview = event => {
     document.body.style.cursor = null
-
     this.props.onStop(this.state.color)
 
     this.safeSetState({
@@ -117,8 +124,11 @@ export class Eyedropper extends React.Component {
 
   colorPreview = event => {
     if (!this.state.canvas) return
+
     const {x, y} = event
     const color = getColorFromCanvas(this.state.canvas, x, y)
+
+    this.renderPreviewCanvas(x, y)
 
     this.safeSetState({
       color,
@@ -136,11 +146,35 @@ export class Eyedropper extends React.Component {
     document.body.removeChild(el)
   }
 
+  renderPreviewCanvas = (x, y) => {
+    if (!this.state.canvas || !this.previewCanvas) return
+    if (!this.state.isInPreviewMode) return
+
+    const {previewSize, previewScale} = this.props
+    const context = this.previewCanvas.getContext('2d')
+    const canvasSize = Math.round(previewSize / previewScale)
+    const offsetPreviewSize = Math.round(canvasSize / 2)
+    const accuracyBuffer = 0.5 // For non-2x resolution displays
+
+    context.drawImage(
+      this.state.canvas,
+      x - offsetPreviewSize + accuracyBuffer,
+      y - offsetPreviewSize + accuracyBuffer,
+      canvasSize,
+      canvasSize,
+      0,
+      0,
+      canvasSize,
+      canvasSize,
+    )
+  }
+
   getColorPreviewStyles = () => {
-    const {color, mouseX, mouseY} = this.state
+    const {color, isInPreviewMode, mouseX, mouseY} = this.state
 
     const boxShadow = `
       0 0 0 3px ${color},
+      0 0 0 4px white,
       0 2px 4px rgba(0, 0, 0, 0.1),
       0 0px 12px 3px rgba(0, 0, 0, 0.3),
       0 8px 20px rgba(0, 0, 0, 0.2)
@@ -148,16 +182,33 @@ export class Eyedropper extends React.Component {
 
     return {
       boxShadow,
+      display: isInPreviewMode ? 'block' : 'none',
       transform: `translate(${mouseX - 50}px,${mouseY - 50}px)`,
     }
   }
 
+  setPreviewNodeRef = node => (this.previewCanvas = node)
+
   render() {
-    const {isInPreviewMode, color} = this.state
-    if (!isInPreviewMode) return null
+    const {previewSize, previewScale} = this.props
+    const {color} = this.state
+
+    const previewNodeSize = Math.round(previewSize / previewScale)
 
     return (
-      <ColorPreviewUI style={this.getColorPreviewStyles()}>
+      <ColorPreviewUI
+        style={this.getColorPreviewStyles()}
+        previewSize={previewSize}
+      >
+        <GridUI />
+        <PreviewCanvasUI
+          ref="previewCanvas"
+          innerRef={this.setPreviewNodeRef}
+          width={previewNodeSize}
+          height={previewNodeSize}
+          previewSize={previewSize}
+          previewScale={previewScale}
+        />
         <CrosshairUI />
         <LabelUI>{color}</LabelUI>
       </ColorPreviewUI>
@@ -199,15 +250,16 @@ const ColorPreviewUI = styled('div')`
   box-sizing: border-box;
   border: 3px solid white;
   border-radius: 9999px;
-  height: 100px;
-  width: 100px;
   position: fixed;
   z-index: 999999;
   top: 0;
   left: 0;
   will-change: transform, box-shadow;
 
-  * {
+  ${({previewSize}) => `
+    height: ${previewSize}px;
+    width: ${previewSize}px;
+  `} * {
     box-sizing: border-box;
   }
 `
@@ -223,6 +275,7 @@ const CrosshairUI = styled('div')`
   top: 50%;
   left: 50%;
   margin: -3px 0 0 -3px;
+  z-index: 999999;
 `
 
 const LabelUI = styled('div')`
@@ -231,7 +284,7 @@ const LabelUI = styled('div')`
   color: white;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial,
     sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  font-size: 11px;
+  font-size: 10px;
   line-height: 1;
   padding: 4px 4px;
   position: absolute;
@@ -240,6 +293,38 @@ const LabelUI = styled('div')`
   left: 50%;
   margin-left: -27px;
   text-align: center;
+  z-index: 999999;
+`
+
+const PreviewCanvasUI = styled('canvas')`
+  display: block;
+  border-radius: 99999px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+
+  ${({previewSize, previewScale}) => {
+    const canvasSize = Math.round(previewSize / previewScale)
+
+    return `
+      height: ${canvasSize}px;
+      width: ${canvasSize}px;
+      transform: translate(-50%, -50%) scale(${previewScale});
+    `
+  }};
+`
+
+const GridUI = styled('div')`
+  background: url(${GRID_PATTERN}) 1px 1px repeat;
+  position: absolute;
+  opacity: 0.2;
+  top: 0;
+  left: 0;
+  border-radius: 9999px;
+  width: 100%;
+  height: 100%;
+  z-index: 999999;
 `
 
 export default Eyedropper

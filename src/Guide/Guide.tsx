@@ -36,11 +36,15 @@ class Guide extends React.PureComponent<any, State> {
   }
 
   componentDidMount() {
-    this.resizeObserver.observe(this.node)
+    if (this.node) {
+      this.resizeObserver.observe(this.node)
+    }
   }
 
   componentWillUnmount() {
-    this.resizeObserver.unobserve(this.node)
+    if (this.node) {
+      this.resizeObserver.unobserve(this.node)
+    }
   }
 
   resizeHandler = entries => {
