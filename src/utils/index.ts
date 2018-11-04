@@ -4,12 +4,13 @@ type CSSNumberValue = string
 export const CLASSNAME_PREFIX = 'HSDSArtboard'
 
 export const Keys = {
-  Z: 90,
-  X: 88,
-  C: 67,
-  S: 83,
   B: 66,
+  C: 67,
+  D: 68,
   G: 71,
+  S: 83,
+  X: 88,
+  Z: 90,
   SPACE: 32,
   ESC: 27,
   BACKSPACE: 8,

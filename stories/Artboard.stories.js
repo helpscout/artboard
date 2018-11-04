@@ -155,3 +155,24 @@ stories.add('Without center guides', () => (
     </div>
   </Artboard>
 ))
+
+stories.add('Dark Mode', () => (
+  <Artboard
+    darkMode={true}
+    withResponsiveWidth
+    withCenterGuides={false}
+    id="dark-mode"
+    guides={[
+      <Guide height="20px" top="15px" width="100%" />,
+      <Guide height="20px" bottom="15px" width="100%" />,
+      <Guide height="100%" left="15px" width="10px" />,
+      <Guide height="100%" right="15px" width="10px" />,
+    ]}
+  >
+    <div style={{background: '#eee', textAlign: 'center'}}>
+      <Button version={2} kind="primary" size="lg">
+        Button
+      </Button>
+    </div>
+  </Artboard>
+))

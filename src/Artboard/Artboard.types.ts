@@ -28,6 +28,7 @@ export interface Props {
 export interface State {
   artboardHeight: number
   artboardWidth: number
+  darkMode: boolean
   isPerformingAction: boolean
   isCrosshairActive: boolean
   isEyeDropperActive: boolean

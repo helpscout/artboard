@@ -4,6 +4,7 @@ import ActionTypes from './Artboard.ActionTypes'
 export const initialState = {
   artboardHeight: 400,
   artboardWidth: 400,
+  darkMode: false,
   isPerformingAction: false,
   isCrosshairActive: false,
   isEyeDropperActive: false,
@@ -50,7 +51,12 @@ const reducer = (state: State = initialState, action: Action) => {
       }
 
     case ActionTypes.RESET:
-      return initialState
+      return {...initialState, darkMode: state.darkMode}
+
+    case ActionTypes.TOGGLE_DARK_MODE:
+      return {
+        darkMode: !state.darkMode,
+      }
 
     /**
      * ZOOM ACTIONS

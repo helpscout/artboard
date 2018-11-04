@@ -54,6 +54,19 @@ const ButtonUI = styled('button')`
     background-image: none;
   }
 
+  ${({theme}) =>
+    theme.darkMode &&
+    `
+    background-color: #232223;
+    background-image: none;
+    border-color: #000;
+    color: white;
+
+    &:active {
+      background-color: #2b2a2b;
+    }
+  `};
+
   ${({isActive}) =>
     isActive &&
     `

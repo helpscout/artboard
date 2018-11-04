@@ -2,6 +2,7 @@ import * as React from 'react'
 import styled from '@helpscout/fancy'
 import Base from '../Base'
 import Button from '../Button'
+import LabelText from '../LabelText'
 import {noop} from '../../utils'
 
 export interface Props {
@@ -24,23 +25,25 @@ export class ButtonControl extends React.PureComponent<Props> {
     return (
       <Base>
         <LabelUI>
-          <Button {...rest} />
-          <LabelTextUI>{label}</LabelTextUI>
+          <ButtonWrapperUI>
+            <Button {...rest} />
+          </ButtonWrapperUI>
+          <LabelText>{label}</LabelText>
         </LabelUI>
       </Base>
     )
   }
 }
 
+const ButtonWrapperUI = styled('div')`
+  margin-bottom: 4px;
+`
+
 const LabelUI = styled('label')`
   display: block;
   margin: 0;
   padding: 0;
   text-align: center;
-`
-
-const LabelTextUI = styled('div')`
-  padding: 8px;
 `
 
 export default ButtonControl

@@ -1,5 +1,6 @@
 import {Props, State, Action} from './Artboard.types'
 import * as React from 'react'
+import {ThemeProvider} from '@helpscout/fancy'
 import KeyboardHints from './Artboard.KeyboardHints'
 import ToolbarButton from './Artboard.ToolbarButton'
 import Toolbar from './Artboard.Toolbar'
@@ -14,6 +15,7 @@ import GuideProvider from '../GuideProvider'
 import GuideContainer from '../GuideContainer'
 import Guide from '../Guide'
 import ActionTypes from './Artboard.ActionTypes'
+import {defaultProps} from './Artboard.utils'
 import {cx, Keys, isInputNode} from '../utils'
 import {loadSessionState, saveSessionState} from './Artboard.utils'
 import {
@@ -23,35 +25,20 @@ import {
   ZoomWrapperUI,
   KeyboardHintsWrapperUI,
   ToolbarWrapperUI,
+  ToolbarLeftUI,
   ToolbarRightUI,
   config,
 } from './Artboard.css'
 
 export class Artboard extends React.Component<Props, State> {
-  static defaultProps = {
-    __debug: false,
-    alignHorizontally: 'center',
-    alignVertically: 'center',
-    darkMode: false,
-    defaultHeight: 400,
-    defaultWidth: 400,
-    posX: 0,
-    posY: 0,
-    showGuides: true,
-    showBoxInspector: false,
-    snapshots: [],
-    withCenterGuides: true,
-    withResponsiveHeight: false,
-    withResponsiveWidth: false,
-    zoomLevel: 1,
-  }
-
+  static defaultProps = defaultProps
   __bodyBackGroundColor: string | null = null
 
   constructor(props) {
     super(props)
 
     const {
+      darkMode,
       posX,
       posY,
       showGuides,
@@ -67,6 +54,7 @@ export class Artboard extends React.Component<Props, State> {
 
     const mergedState = {
       ...initialState,
+      darkMode,
       posX,
       posY,
       showGuides,
@@ -150,6 +138,11 @@ export class Artboard extends React.Component<Props, State> {
     if (isInputNode(event.target)) return
 
     switch (event.keyCode) {
+      case Keys.D:
+        if (event.altKey) {
+          this.toggleDarkMode()
+        }
+        break
       case Keys.Z:
         this.stopCrosshair()
         if (event.altKey) {
@@ -251,6 +244,10 @@ export class Artboard extends React.Component<Props, State> {
         },
       })
     }
+  }
+
+  toggleDarkMode = () => {
+    this.setStateWithReducer({type: ActionTypes.TOGGLE_DARK_MODE})
   }
 
   prepareZoomIn = () => {
@@ -404,14 +401,24 @@ export class Artboard extends React.Component<Props, State> {
 
   renderToolbar = () => {
     const {
+      darkMode,
       showBoxInspector,
       showSizeInspector,
       showGuides,
       isCrosshairActive,
     } = this.state
+
     return (
       <ToolbarWrapperUI>
         <Toolbar>
+          <ToolbarLeftUI>
+            <ToolbarButton
+              onClick={this.toggleDarkMode}
+              label="Dark Mode"
+              icon="Moon"
+              isActive={darkMode}
+            />
+          </ToolbarLeftUI>
           <ToolbarButton
             onClick={this.toggleGuides}
             label="Guides"
@@ -515,6 +522,7 @@ export class Artboard extends React.Component<Props, State> {
   render() {
     const {alignHorizontally, alignVertically, children} = this.props
     const {
+      darkMode,
       showGuides,
       showBoxInspector,
       showSizeInspector,
@@ -528,63 +536,65 @@ export class Artboard extends React.Component<Props, State> {
     } = this.state
 
     return (
-      <GuideProvider showGuide={showGuides}>
-        <ArtboardWrapperUI className={cx('ArtboardWrapper')} {...this.state}>
-          <Crosshair
-            isActive={isCrosshairActive}
-            showSnapshots={showSnapshots}
-            snapshots={snapshots}
-            onSnapshot={this.addSnapshot}
-            posX={posX}
-            posY={posY}
-            zoomLevel={zoomLevel}
-          />
-          <Eyedropper
-            isActive={isEyeDropperActive}
-            onReady={this.readyEyeDropper}
-            onStop={this.stopEyeDropper}
-          />
-          {this.renderToolbar()}
-          <ArtboardUI
-            {...this.state}
-            className={cx('Artboard')}
-            style={this.getArtboardStyles()}
-          >
-            <ContentUI
-              className={cx('ArtboardContent')}
-              {...{
-                alignHorizontally,
-                alignVertically,
-              }}
-            >
-              <Resizer
-                {...this.getResizerProps()}
-                onResize={this.handleOnResize}
-              >
-                <BoxInspector showOutlines={showBoxInspector}>
-                  <SizeInspector
-                    showOutlines={showSizeInspector}
-                    zoomLevel={zoomLevel}
-                  >
-                    {children}
-                  </SizeInspector>
-                </BoxInspector>
-              </Resizer>
-              {this.renderGuides()}
-            </ContentUI>
-          </ArtboardUI>
-          <ZoomWrapperUI>
-            <Zoom
-              onZoomIn={this.zoomIn}
-              onZoomOut={this.zoomOut}
-              zoomLevel={this.state.zoomLevel}
+      <ThemeProvider theme={{darkMode}}>
+        <GuideProvider showGuide={showGuides}>
+          <ArtboardWrapperUI className={cx('ArtboardWrapper')} {...this.state}>
+            <Crosshair
+              isActive={isCrosshairActive}
+              showSnapshots={showSnapshots}
+              snapshots={snapshots}
+              onSnapshot={this.addSnapshot}
+              posX={posX}
+              posY={posY}
+              zoomLevel={zoomLevel}
             />
-          </ZoomWrapperUI>
-          <KeyboardHintsWrapperUI>
-            <KeyboardHints />
-          </KeyboardHintsWrapperUI>
-        </ArtboardWrapperUI>
-      </GuideProvider>
+            <Eyedropper
+              isActive={isEyeDropperActive}
+              onReady={this.readyEyeDropper}
+              onStop={this.stopEyeDropper}
+            />
+            {this.renderToolbar()}
+            <ArtboardUI
+              {...this.state}
+              className={cx('Artboard')}
+              style={this.getArtboardStyles()}
+            >
+              <ContentUI
+                className={cx('ArtboardContent')}
+                {...{
+                  alignHorizontally,
+                  alignVertically,
+                }}
+              >
+                <Resizer
+                  {...this.getResizerProps()}
+                  onResize={this.handleOnResize}
+                >
+                  <BoxInspector showOutlines={showBoxInspector}>
+                    <SizeInspector
+                      showOutlines={showSizeInspector}
+                      zoomLevel={zoomLevel}
+                    >
+                      {children}
+                    </SizeInspector>
+                  </BoxInspector>
+                </Resizer>
+                {this.renderGuides()}
+              </ContentUI>
+            </ArtboardUI>
+            <ZoomWrapperUI>
+              <Zoom
+                onZoomIn={this.zoomIn}
+                onZoomOut={this.zoomOut}
+                zoomLevel={this.state.zoomLevel}
+              />
+            </ZoomWrapperUI>
+            <KeyboardHintsWrapperUI>
+              <KeyboardHints />
+            </KeyboardHintsWrapperUI>
+          </ArtboardWrapperUI>
+        </GuideProvider>
+      </ThemeProvider>
     )
   }
 }

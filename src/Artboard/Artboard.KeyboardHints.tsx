@@ -9,6 +9,9 @@ export class KeyboardHints extends React.PureComponent<any> {
         <KeyboardHintsActionsUI>
           <div>Keyboard:</div>
           <div>
+            <strong>Alt+D</strong>: Dark Mode
+          </div>
+          <div>
             <strong>Z</strong>: Zoom In
           </div>
           <div>
@@ -24,7 +27,7 @@ export class KeyboardHints extends React.PureComponent<any> {
             <strong>B</strong>: Box Inspector
           </div>
           <div>
-            <strong>S</strong>: Toggle Size Inspector
+            <strong>S</strong>: Size Inspector
           </div>
           <div>
             <strong>X</strong>: Crosshair

@@ -1,7 +1,24 @@
 import {State, Action} from './Artboard.types'
 const LOCAL_STORAGE_KEY = '__HSDS_ARTBOARD__'
 
-// TODO: FIGURE OUT THIS MATH!
+export const defaultProps = {
+  __debug: false,
+  alignHorizontally: 'center',
+  alignVertically: 'center',
+  darkMode: false,
+  defaultHeight: 400,
+  defaultWidth: 400,
+  posX: 0,
+  posY: 0,
+  showGuides: true,
+  showBoxInspector: false,
+  snapshots: [],
+  withCenterGuides: true,
+  withResponsiveHeight: false,
+  withResponsiveWidth: false,
+  zoomLevel: 1,
+}
+
 export function getNextArtboardSize(state: State, action: Action) {
   const {artboardWidth: nextWidth, artboardHeight: nextHeight} = action.payload
   const {artboardWidth, artboardHeight, zoomLevel} = state

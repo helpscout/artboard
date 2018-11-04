@@ -2,6 +2,7 @@ import * as React from 'react'
 import styled from '@helpscout/fancy'
 import Base from '../UI/Base'
 import Button from '../UI/Button'
+import LabelText from '../UI/LabelText'
 import {noop} from '../utils'
 
 export interface Props {
@@ -37,7 +38,9 @@ export class Zoom extends React.PureComponent<Props> {
           >
             -
           </Button>
-          <ZoomLevelUI>{zoomPercentage}</ZoomLevelUI>
+          <ZoomLevelUI>
+            <LabelText>{zoomPercentage}</LabelText>
+          </ZoomLevelUI>
           <Button
             onClick={onZoomIn}
             title="Zoom out"
@@ -47,7 +50,9 @@ export class Zoom extends React.PureComponent<Props> {
             +
           </Button>
         </ZoomActionsUI>
-        <ZoomTextUI>Zoom</ZoomTextUI>
+        <ZoomTextUI>
+          <LabelText>Zoom</LabelText>
+        </ZoomTextUI>
       </ZoomUI>
     )
   }
@@ -63,7 +68,7 @@ const ZoomUI = styled(Base)`
   z-index: 2147483647;
 `
 
-const ZoomActionsUI = styled('div')`
+const ZoomActionsUI = styled(Base)`
   align-items: center;
   display: flex;
   justify-content: center;
@@ -71,11 +76,11 @@ const ZoomActionsUI = styled('div')`
   pointer-events: all;
 
   > * {
-    margin: 0 5px;
+    margin: 0 3px;
   }
 `
 
-const ZoomTextUI = styled('div')`
+const ZoomTextUI = styled(Base)`
   box-sizing: border-box;
   font-size: 11px;
   line-height: 1;
@@ -85,7 +90,7 @@ const ZoomLevelUI = styled(ZoomTextUI)`
   position: relative;
   text-align: center;
   padding-left: 1px;
-  width: 32px;
+  width: 48px;
 `
 
 export default Zoom
