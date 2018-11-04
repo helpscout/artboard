@@ -8,4 +8,5 @@ src
 images
 scripts
 storybook-static
+testHelpers.ts
 __tests__

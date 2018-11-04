@@ -6,6 +6,7 @@ import {noop} from '../../utils'
 
 export class Button extends React.PureComponent<any> {
   static defaultProps = {
+    isActive: false,
     icon: undefined,
     onClick: noop,
   }
