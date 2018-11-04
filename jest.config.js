@@ -10,6 +10,14 @@ module.exports = Object.assign({}, jestConfig, {
   collectCoverageFrom: []
     .concat(jestConfig.collectCoverageFrom)
     .concat(coverageList),
+  coverageThreshold: {
+    global: {
+      branches: 0,
+      functions: 0,
+      lines: 0,
+      statements: 0,
+    },
+  },
   setupTestFrameworkScriptFile: '<rootDir>/scripts/setupTests.js',
   testMatch: [
     '<rootDir>/src/**/__tests__/**/*.js?(x)',
