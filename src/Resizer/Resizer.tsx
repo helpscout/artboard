@@ -5,6 +5,8 @@ import {cx} from '../utils'
 
 export class Resizer extends React.PureComponent<any> {
   static defaultProps = {
+    height: 400,
+    width: 400,
     withResponsiveHeight: false,
     withResponsiveWidth: false,
   }

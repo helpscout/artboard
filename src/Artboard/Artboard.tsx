@@ -41,6 +41,8 @@ export class Artboard extends React.Component<Props, State> {
     showBoxInspector: false,
     snapshots: [],
     withCenterGuides: true,
+    withResponsiveHeight: false,
+    withResponsiveWidth: false,
     zoomLevel: 1,
   }
 

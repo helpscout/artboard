@@ -36,17 +36,20 @@ class Guide extends React.PureComponent<any, State> {
   }
 
   componentDidMount() {
+    /* istanbul ignore else */
     if (this.node) {
       this.resizeObserver.observe(this.node)
     }
   }
 
   componentWillUnmount() {
+    /* istanbul ignore next */
     if (this.node) {
       this.resizeObserver.unobserve(this.node)
     }
   }
 
+  /* istanbul ignore next */
   resizeHandler = entries => {
     for (const entry of entries) {
       const {width, height} = entry.contentRect

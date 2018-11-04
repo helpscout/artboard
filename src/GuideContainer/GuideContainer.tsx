@@ -17,7 +17,7 @@ class GuideContainer extends React.PureComponent<any> {
       <GuideContainerUI
         {...getPreparedProps(rest)}
         children={children}
-        className={classNames(cx('Guide'), className)}
+        className={classNames(cx('GuideContainer'), className)}
       />
     )
   }

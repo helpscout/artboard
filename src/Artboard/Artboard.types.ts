@@ -7,7 +7,7 @@ export interface Props {
   defaultHeight: number
   defaultWidth: number
   darkMode: boolean
-  guides: any
+  guides?: any
   id?: string
   name?: string
   height?: number

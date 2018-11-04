@@ -1,6 +1,8 @@
 type CSSPropValue = number | string
 type CSSNumberValue = string
 
+export const CLASSNAME_PREFIX = 'HSDSArtboard'
+
 export const Keys = {
   Z: 90,
   X: 88,
@@ -34,12 +36,19 @@ export function getPreparedProps(props: Object): Object {
 }
 
 export function cx(className?: string): string {
-  const prefix = 'HSDSArtboard'
-  if (!className) return prefix
+  if (!className) return CLASSNAME_PREFIX
 
-  return `${prefix}-${className}`
+  return `${CLASSNAME_PREFIX}-${className}`
+}
+
+export function dotcx(className?: string): string {
+  const baseClassName = cx(className)
+  return `.${baseClassName}`
 }
 
 export function isInputNode(node: HTMLElement): boolean {
-  return ['input', 'textarea'].includes(node.tagName.toLowerCase())
+  return (
+    ['input', 'textarea'].includes(node.tagName.toLowerCase()) ||
+    node.getAttribute('contenteditable') === 'true'
+  )
 }
