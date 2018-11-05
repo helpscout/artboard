@@ -31,6 +31,7 @@ export interface State {
   artboardHeight: number
   artboardWidth: number
   darkMode: boolean
+  guides?: any
   isPerformingAction: boolean
   isCrosshairActive: boolean
   isEyeDropperActive: boolean

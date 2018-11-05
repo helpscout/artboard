@@ -5,6 +5,7 @@ export const initialState = {
   artboardHeight: 400,
   artboardWidth: 400,
   darkMode: false,
+  guides: [],
   initialProps: {},
   isPerformingAction: false,
   isCrosshairActive: false,
