@@ -35,6 +35,11 @@ export function getNextArtboardSize(state: State, action: Action) {
   }
 }
 
+export function getArtboardNameFromProps(props: any) {
+  if (!props) return ''
+  return props.id || props.name || ''
+}
+
 export function loadState(): Object {
   try {
     const serializedState = localStorage.getItem(LOCAL_STORAGE_KEY)

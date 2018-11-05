@@ -1,22 +1,30 @@
-import {State, Action} from './Artboard.types'
 import ActionTypes from './Artboard.ActionTypes'
 
 export const initialState = {
+  artboardName: '',
   artboardHeight: 400,
   artboardWidth: 400,
   darkMode: false,
+  initialProps: {},
   isPerformingAction: false,
   isCrosshairActive: false,
   isEyeDropperActive: false,
   isKeyDown: false,
   isMoving: undefined,
   isZooming: undefined,
+  height: undefined,
+  width: undefined,
+  minWidth: undefined,
+  minHeight: undefined,
+  maxWidth: undefined,
+  maxHeight: undefined,
   posX: 0,
   posY: 0,
   showGuides: true,
   showBoxInspector: false,
   showSizeInspector: false,
   showSnapshots: true,
+  withCenterGuides: true,
   withResponsiveHeight: false,
   withResponsiveWidth: false,
   snapshots: [],
@@ -30,31 +38,54 @@ let _showSizeInspector = initialState.showSizeInspector
 let _zoomLevel = initialState.zoomLevel
 let _posX = initialState.posX
 let _posY = initialState.posY
+let initialProps = {}
 
 const ZOOM_LEVEL_MAX = 32
 const ZOOM_LEVEL_MIN = 0.125
 
-const reducer = (state: State = initialState, action: Action) => {
+const reducer = (state = initialState, action) => {
   let nextZoom = state.zoomLevel
   switch (action.type) {
     /**
      * GENERAL ACTIONS
      */
+    case ActionTypes.ON_READY:
+      initialProps = action.payload.props
+      return {
+        ...state,
+        artboardHeight: null,
+        artboardWidth: null,
+        ...initialProps,
+      }
+
+    case ActionTypes.LOAD_LOCAL_STATE:
+      return {
+        ...state,
+        ...action.payload.state,
+      }
+
     case ActionTypes.PERFORM_ACTION_START:
       return {
+        ...state,
         isPerformingAction: true,
       }
 
     case ActionTypes.PERFORM_ACTION_END:
       return {
+        ...state,
         isPerformingAction: false,
       }
 
     case ActionTypes.RESET:
-      return {...initialState, darkMode: state.darkMode}
+      return {
+        ...initialState,
+        ...initialProps,
+        darkMode: state.darkMode,
+      }
 
     case ActionTypes.TOGGLE_DARK_MODE:
       return {
+        ...state,
         darkMode: !state.darkMode,
       }
 
@@ -63,6 +94,7 @@ const reducer = (state: State = initialState, action: Action) => {
      */
     case ActionTypes.ZOOM_IN_START:
       return {
+        ...state,
         isKeyDown: true,
         isPerformingAction: true,
         isZooming: 'in',
@@ -70,6 +102,7 @@ const reducer = (state: State = initialState, action: Action) => {
 
     case ActionTypes.ZOOM_OUT_START:
       return {
+        ...state,
         isKeyDown: true,
         isPerformingAction: true,
         isZooming: 'out',
@@ -78,17 +111,20 @@ const reducer = (state: State = initialState, action: Action) => {
     case ActionTypes.ZOOM_IN:
       nextZoom = state.zoomLevel * 2
       return {
+        ...state,
         zoomLevel: nextZoom > ZOOM_LEVEL_MAX ? ZOOM_LEVEL_MAX : nextZoom,
       }
 
     case ActionTypes.ZOOM_OUT:
       nextZoom = state.zoomLevel / 2
       return {
+        ...state,
         zoomLevel: nextZoom < ZOOM_LEVEL_MIN ? ZOOM_LEVEL_MIN : nextZoom,
       }
 
     case ActionTypes.ZOOM_RESET:
       return {
+        ...state,
         isZooming: undefined,
       }
 
@@ -97,23 +133,28 @@ const reducer = (state: State = initialState, action: Action) => {
      */
     case ActionTypes.MOVE_START:
       return {
+        ...state,
         isKeyDown: true,
+        isPerformingAction: true,
         isMoving: 'start',
       }
 
     case ActionTypes.MOVE_DRAG_START:
       return {
+        ...state,
         isMoving: 'dragging',
       }
 
     case ActionTypes.MOVE_DRAG_END:
       return {
+        ...state,
         isMoving: 'start',
         isKeyDown: false,
       }
 
     case ActionTypes.MOVE_DRAG:
       return {
+        ...state,
         isMoving: 'dragging',
         posX: Math.round(
           state.posX + (action.payload.posX * 1) / state.zoomLevel,
@@ -125,6 +166,7 @@ const reducer = (state: State = initialState, action: Action) => {
 
     case ActionTypes.MOVE_END:
       return {
+        ...state,
         isMoving: undefined,
       }
 
@@ -133,6 +175,7 @@ const reducer = (state: State = initialState, action: Action) => {
      */
     case ActionTypes.RESIZE_ARTBOARD:
       return {
+        ...state,
         artboardWidth: action.payload.artboardWidth,
         artboardHeight: action.payload.artboardHeight,
       }
@@ -142,16 +185,19 @@ const reducer = (state: State = initialState, action: Action) => {
      */
     case ActionTypes.TOGGLE_GUIDES:
       return {
+        ...state,
         showGuides: !state.showGuides,
       }
 
     case ActionTypes.TOGGLE_BOX_INSPECTOR:
       return {
+        ...state,
         showBoxInspector: !state.showBoxInspector,
       }
 
     case ActionTypes.TOGGLE_SIZE_INSPECTOR:
       return {
+        ...state,
         showSizeInspector: !state.showSizeInspector,
       }
 
@@ -164,7 +210,10 @@ const reducer = (state: State = initialState, action: Action) => {
       _zoomLevel = state.zoomLevel
 
       return {
+        ...state,
+        isCrosshairActive: false,
         isEyeDropperActive: true,
+        isPerformingAction: true,
         posX: 0,
         posY: 0,
         showGuides: false,
@@ -174,11 +223,16 @@ const reducer = (state: State = initialState, action: Action) => {
       }
 
     case ActionTypes.EYEDROPPER_READY:
-      return {}
+      return {
+        ...state,
+        isPerformingAction: true,
+      }
 
     case ActionTypes.EYEDROPPER_STOP:
       return {
+        ...state,
         isEyeDropperActive: false,
+        isPerformingAction: false,
         posX: _posX,
         posY: _posY,
         showGuides: _showGuides,
@@ -191,6 +245,7 @@ const reducer = (state: State = initialState, action: Action) => {
       _showBoxInspector = state.showBoxInspector
       _showSizeInspector = state.showSizeInspector
       return {
+        ...state,
         isCrosshairActive: true,
         showSnapshots: true,
         showBoxInspector: false,
@@ -199,6 +254,7 @@ const reducer = (state: State = initialState, action: Action) => {
 
     case ActionTypes.CROSSHAIR_END:
       return {
+        ...state,
         isCrosshairActive: false,
         showBoxInspector: _showBoxInspector,
         showSizeInspector: _showSizeInspector,
@@ -206,26 +262,30 @@ const reducer = (state: State = initialState, action: Action) => {
 
     case ActionTypes.CROSSHAIR_ADD_SNAPSHOT:
       return {
+        ...state,
         snapshots: [...state.snapshots, action.payload.snapshot],
       }
 
     case ActionTypes.CROSSHAIR_SHOW_SNAPSHOTS:
       return {
+        ...state,
         showSnapshots: true,
       }
 
     case ActionTypes.CROSSHAIR_HIDE_SNAPSHOTS:
       return {
+        ...state,
         showSnapshots: false,
       }
 
     case ActionTypes.CROSSHAIR_CLEAR:
       return {
+        ...state,
         snapshots: [],
       }
 
     default:
-      return {}
+      return state
   }
 }
 

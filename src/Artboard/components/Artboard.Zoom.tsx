@@ -1,9 +1,11 @@
 import * as React from 'react'
 import styled from '@helpscout/fancy'
-import Base from '../UI/Base'
-import Button from '../UI/Button'
-import LabelText from '../UI/LabelText'
-import {noop} from '../utils'
+import {connect} from 'react-redux'
+import {zoomIn, zoomOut} from '../Artboard.actions'
+import Base from '../../UI/Base'
+import Button from '../../UI/Button'
+import LabelText from '../../UI/LabelText'
+import {noop} from '../../utils'
 
 export interface Props {
   onZoomIn: (event: Event) => void
@@ -93,4 +95,20 @@ const ZoomLevelUI = styled(ZoomTextUI)`
   width: 48px;
 `
 
-export default Zoom
+const mapStateToProps = state => {
+  const {zoomLevel} = state
+
+  return {
+    zoomLevel,
+  }
+}
+
+const mapDispatchToProps = {
+  onZoomIn: zoomIn,
+  onZoomOut: zoomOut,
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Zoom)

@@ -1,8 +1,8 @@
 import * as React from 'react'
 import styled from '@helpscout/fancy'
-import {cx, noop} from '../utils'
-import Base from '../UI/Base'
-import ButtonControl from '../UI/ButtonControl'
+import {cx, noop} from '../../../utils'
+import Base from '../../../UI/Base'
+import ButtonControl from '../../../UI/ButtonControl'
 
 export interface Props {
   label: string

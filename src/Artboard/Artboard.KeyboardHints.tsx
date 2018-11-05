@@ -7,7 +7,6 @@ export class KeyboardHints extends React.PureComponent<any> {
     return (
       <KeyboardHintsUI>
         <KeyboardHintsActionsUI>
-          <div>Keyboard:</div>
           <div>
             <strong>Alt+D</strong>: Dark Mode
           </div>
@@ -50,17 +49,18 @@ const KeyboardHintsUI = styled(Base)`
   opacity: 0.3;
   pointer-events: none;
   transform: translateZ(0);
-  z-index: 2147483647;
 `
 
-const KeyboardHintsActionsUI = styled('div')`
+const KeyboardHintsActionsUI = styled(Base)`
   align-items: center;
   display: flex;
+  flex-wrap: wrap;
+  font-size: 10px;
   justify-content: center;
   margin-bottom: 5px;
 
   * {
-    margin: 0 5px;
+    margin: 3px 5px;
   }
 `
 

@@ -1,72 +1,28 @@
-import {Props, State, Action} from './Artboard.types'
 import * as React from 'react'
+import {Provider, connect} from 'react-redux'
+import * as actions from './Artboard.actions'
 import {ThemeProvider} from '@helpscout/fancy'
-import KeyboardHints from './Artboard.KeyboardHints'
-import ToolbarButton from './Artboard.ToolbarButton'
-import Toolbar from './Artboard.Toolbar'
-import reducer, {initialState} from './Artboard.reducer'
-import Zoom from './Artboard.Zoom'
-import BoxInspector from '../BoxInspector'
-import Crosshair from '../Crosshair'
-import Eyedropper from '../Eyedropper'
-import SizeInspector from '../SizeInspector'
-import Resizer from '../Resizer'
-import GuideProvider from '../GuideProvider'
-import GuideContainer from '../GuideContainer'
-import Guide from '../Guide'
-import ActionTypes from './Artboard.ActionTypes'
+import store from './Artboard.store'
 import {defaultProps} from './Artboard.utils'
-import {cx, Keys, isInputNode} from '../utils'
-import {loadSessionState, saveSessionState} from './Artboard.utils'
-import {
-  ArtboardWrapperUI,
-  ArtboardUI,
-  ContentUI,
-  ZoomWrapperUI,
-  KeyboardHintsWrapperUI,
-  ToolbarWrapperUI,
-  ToolbarLeftUI,
-  ToolbarRightUI,
-  config,
-} from './Artboard.css'
+import {Keys, isInputNode} from '../utils'
+import {saveSessionState} from './Artboard.utils'
+import {ZoomWrapperUI, KeyboardHintsWrapperUI, config} from './Artboard.css'
+import Canvas from './components/Artboard.Canvas'
+import Crosshair from './components/Artboard.Crosshair'
+import Eyedropper from './components/Artboard.Eyedropper'
+import KeyboardHints from './Artboard.KeyboardHints'
+import Toolbar from './components/Toolbar'
+import Wrapper from './components/Artboard.Wrapper'
+import Zoom from './components/Artboard.Zoom'
 
-export class Artboard extends React.Component<Props, State> {
+export class Artboard extends React.Component<any> {
   static defaultProps = defaultProps
   __bodyBackGroundColor: string | null = null
 
   constructor(props) {
     super(props)
-
-    const {
-      darkMode,
-      posX,
-      posY,
-      showGuides,
-      showBoxInspector,
-      width,
-      height,
-      snapshots,
-      zoomLevel,
-    } = props
-
-    const artboardName = this.getArtboardNameFromProps(props)
-    const localState = loadSessionState(artboardName)
-
-    const mergedState = {
-      ...initialState,
-      darkMode,
-      posX,
-      posY,
-      showGuides,
-      showBoxInspector,
-      snapshots,
-      zoomLevel,
-      artboardHeight: height,
-      artboardWidth: width,
-      ...localState,
-    }
-
-    this.state = mergedState
+    props.onReady(props.__initialProps)
+    props.loadLocalState(props.__initialProps)
   }
 
   componentDidMount() {
@@ -87,27 +43,14 @@ export class Artboard extends React.Component<Props, State> {
     window.removeEventListener('mouseup', this.handleOnMouseUp)
     window.removeEventListener('mousemove', this.handleOnMouseMove)
     this.unsetBackgroundColor()
+
+    this.props.saveLocalState()
   }
 
-  setStateWithReducer = (action: Action) => {
-    const __state = {...this.state}
-
-    this.setState(
-      // @ts-ignore
-      (state: State) => {
-        return this.stateReducer(state, action)
-      },
-      () => {
-        if (this.props.__debug) {
-          console.group('Artboard: Debugger')
-          console.log('Prev State:', __state)
-          console.log('Next State:', this.state)
-          console.groupEnd()
-        }
-        // Save session to localStorage
-        this.saveState()
-      },
-    )
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) {
+      this.props.saveLocalState()
+    }
   }
 
   getArtboardNameFromProps = props => {
@@ -119,10 +62,6 @@ export class Artboard extends React.Component<Props, State> {
     if (!artboardName) return
 
     saveSessionState(artboardName, this.state)
-  }
-
-  stateReducer = (state: State = initialState, action: Action) => {
-    return reducer(state, action)
   }
 
   setBackgroundColor = () => {
@@ -172,7 +111,7 @@ export class Artboard extends React.Component<Props, State> {
   handleOnKeyUp = event => {
     switch (event.keyCode) {
       case Keys.Z:
-        this.setStateWithReducer({type: ActionTypes.ZOOM_RESET})
+        this.props.zoomReset()
         break
 
       case Keys.X:
@@ -182,7 +121,7 @@ export class Artboard extends React.Component<Props, State> {
         break
 
       case Keys.SPACE:
-        this.setStateWithReducer({type: ActionTypes.MOVE_END})
+        this.props.moveEnd()
         break
 
       case Keys.ESC:
@@ -199,11 +138,11 @@ export class Artboard extends React.Component<Props, State> {
         break
     }
 
-    this.setStateWithReducer({type: ActionTypes.PERFORM_ACTION_END})
+    this.props.performActionEnd()
   }
 
   handleOnClick = () => {
-    const {isZooming} = this.state
+    const {isZooming} = this.props
 
     if (isZooming) {
       if (isZooming === 'in') {
@@ -215,388 +154,190 @@ export class Artboard extends React.Component<Props, State> {
   }
 
   handleOnMouseDown = () => {
-    const {isMoving} = this.state
+    const {isMoving} = this.props
 
     if (isMoving && isMoving !== 'dragging') {
-      return this.setStateWithReducer({type: ActionTypes.MOVE_DRAG_START})
+      this.props.moveDragStart()
     }
   }
 
   handleOnMouseUp = () => {
-    const {isMoving} = this.state
+    const {isMoving} = this.props
 
     if (isMoving && isMoving === 'dragging') {
-      return this.setStateWithReducer({type: ActionTypes.MOVE_DRAG_END})
+      this.props.moveDragEnd()
     }
   }
 
   handleOnMouseMove = event => {
-    const {isMoving} = this.state
+    const {isMoving} = this.props
 
     if (isMoving && isMoving === 'dragging') {
       const {movementX, movementY} = event
 
-      return this.setStateWithReducer({
-        type: ActionTypes.MOVE_DRAG,
-        payload: {
-          posX: movementX,
-          posY: movementY,
-        },
+      this.props.moveDrag({
+        posX: movementX,
+        posY: movementY,
       })
     }
   }
 
   toggleDarkMode = () => {
-    this.setStateWithReducer({type: ActionTypes.TOGGLE_DARK_MODE})
+    this.props.toggleDarkMode()
   }
 
   prepareZoomIn = () => {
-    if (this.state.isKeyDown && this.state.isZooming === 'in') return
+    if (this.props.isKeyDown && this.props.isZooming === 'in') return
 
-    this.setStateWithReducer({type: ActionTypes.PERFORM_ACTION_START})
-    this.setStateWithReducer({type: ActionTypes.ZOOM_IN_START})
+    this.props.zoomInStart()
   }
 
   prepareZoomOut = () => {
-    if (this.state.isKeyDown && this.state.isZooming === 'out') return
+    if (this.props.isKeyDown && this.props.isZooming === 'out') return
 
-    this.setStateWithReducer({type: ActionTypes.PERFORM_ACTION_START})
-    this.setStateWithReducer({type: ActionTypes.ZOOM_OUT_START})
+    this.props.zoomOutStart()
   }
 
   prepareMove = () => {
-    if (this.state.isKeyDown && this.state.isMoving) return
+    if (this.props.isKeyDown && this.props.isMoving) return
 
-    this.setStateWithReducer({type: ActionTypes.PERFORM_ACTION_START})
-    this.setStateWithReducer({type: ActionTypes.MOVE_START})
+    this.props.moveStart()
   }
 
   zoomIn = (event?: Event) => {
     if (event) {
       event.stopPropagation()
     }
-    return this.setStateWithReducer({type: ActionTypes.ZOOM_IN})
+    this.props.zoomIn()
   }
 
   zoomOut = (event?: Event) => {
     if (event) {
       event.stopPropagation()
     }
-    return this.setStateWithReducer({type: ActionTypes.ZOOM_OUT})
+    this.props.zoomOut()
   }
 
-  handleOnResize = (event, resizeProps) => {
-    const {height, width} = resizeProps.size
-
-    return this.setStateWithReducer({
-      type: ActionTypes.RESIZE_ARTBOARD,
-      payload: {
-        artboardHeight: height,
-        artboardWidth: width,
-      },
-    })
+  toggleGuides = () => {
+    this.props.toggleGuides()
   }
 
-  getResizerProps = () => {
-    const {artboardHeight, artboardWidth} = this.state
-    const {
-      defaultWidth,
-      defaultHeight,
-      height,
-      width,
-      minWidth,
-      minHeight,
-      maxWidth,
-      maxHeight,
-      withResponsiveHeight,
-      withResponsiveWidth,
-    } = this.props
-
-    return {
-      defaultWidth,
-      defaultHeight,
-      height: artboardHeight || height,
-      width: artboardWidth || width,
-      minWidth,
-      minHeight,
-      maxWidth,
-      maxHeight,
-      withResponsiveHeight,
-      withResponsiveWidth,
-    }
+  toggleBoxInspector = () => {
+    this.props.toggleBoxInspector()
   }
 
-  toggleGuides = (event?: Event) => {
-    event && event.stopPropagation()
-    this.setStateWithReducer({type: ActionTypes.TOGGLE_GUIDES})
-  }
-
-  toggleBoxInspector = (event?: Event) => {
-    event && event.stopPropagation()
-    this.setStateWithReducer({type: ActionTypes.TOGGLE_BOX_INSPECTOR})
-  }
-
-  toggleSizeInspector = (event?: Event) => {
-    event && event.stopPropagation()
-    this.setStateWithReducer({type: ActionTypes.TOGGLE_SIZE_INSPECTOR})
+  toggleSizeInspector = () => {
+    this.props.toggleSizeInspector()
   }
 
   startEyeDropper = () => {
-    this.setStateWithReducer({type: ActionTypes.CROSSHAIR_END})
-    this.setStateWithReducer({type: ActionTypes.EYEDROPPER_START})
+    this.props.startEyeDropper()
   }
 
   readyEyeDropper = () => {
-    this.setStateWithReducer({type: ActionTypes.PERFORM_ACTION_START})
-    this.setStateWithReducer({type: ActionTypes.EYEDROPPER_READY})
+    this.props.readyEyeDropper()
   }
 
   stopEyeDropper = () => {
-    this.setStateWithReducer({type: ActionTypes.PERFORM_ACTION_END})
-    this.setStateWithReducer({type: ActionTypes.EYEDROPPER_STOP})
+    this.props.stopEyeDropper()
   }
 
-  toggleCrosshair = (event?: Event) => {
-    if (event) {
-      event.stopPropagation()
-    }
-
-    if (this.state.isCrosshairActive) {
-      this.stopCrosshair()
-    } else {
-      this.setStateWithReducer({type: ActionTypes.PERFORM_ACTION_START})
-      this.setStateWithReducer({type: ActionTypes.CROSSHAIR_START})
-    }
+  toggleCrosshair = () => {
+    this.props.toggleCrosshair()
   }
 
   stopCrosshair = () => {
-    if (this.state.isCrosshairActive) {
-      this.setStateWithReducer({type: ActionTypes.PERFORM_ACTION_END})
-      this.setStateWithReducer({type: ActionTypes.CROSSHAIR_END})
+    if (this.props.isCrosshairActive) {
+      this.props.stopCrosshair()
     }
-  }
-
-  addSnapshot = snapshot => {
-    this.setStateWithReducer({
-      type: ActionTypes.CROSSHAIR_ADD_SNAPSHOT,
-      payload: {
-        snapshot,
-      },
-    })
-  }
-
-  handleClearSnapshots = event => {
-    event.stopPropagation()
-    this.clearSnapshots()
   }
 
   clearSnapshots = () => {
-    this.setStateWithReducer({type: ActionTypes.CROSSHAIR_CLEAR})
-  }
-
-  resetSettings = event => {
-    event.stopPropagation()
-    this.setStateWithReducer({type: ActionTypes.RESET})
-  }
-
-  renderToolbar = () => {
-    const {
-      darkMode,
-      showBoxInspector,
-      showSizeInspector,
-      showGuides,
-      isCrosshairActive,
-    } = this.state
-
-    return (
-      <ToolbarWrapperUI>
-        <Toolbar>
-          <ToolbarLeftUI>
-            <ToolbarButton
-              onClick={this.toggleDarkMode}
-              label="Dark Mode"
-              icon="Moon"
-              isActive={darkMode}
-            />
-          </ToolbarLeftUI>
-          <ToolbarButton
-            onClick={this.toggleGuides}
-            label="Guides"
-            icon="Ruler"
-            isActive={showGuides}
-          />
-          <ToolbarButton
-            onClick={this.toggleBoxInspector}
-            label="Box Inspector"
-            icon="Box"
-            isActive={showBoxInspector}
-          />
-          <ToolbarButton
-            onClick={this.toggleSizeInspector}
-            label="Size Inspector"
-            icon="Size"
-            isActive={showSizeInspector}
-          />
-          <ToolbarButton
-            onClick={this.startEyeDropper}
-            label="Color"
-            icon="EyeDropper"
-          />
-          <ToolbarButton
-            onClick={this.toggleCrosshair}
-            label="Crosshair"
-            icon="Crosshair"
-            isActive={isCrosshairActive}
-          />
-          <ToolbarRightUI>
-            <ToolbarButton
-              onClick={this.handleClearSnapshots}
-              label="Clear Crosshairs"
-              icon="Eraser"
-            />
-            <ToolbarButton
-              onClick={this.resetSettings}
-              label="Reset"
-              icon="Refresh"
-            />
-          </ToolbarRightUI>
-        </Toolbar>
-      </ToolbarWrapperUI>
-    )
-  }
-
-  renderGuides = () => {
-    const {guides, withCenterGuides} = this.props
-    let guidesMarkup = guides
-
-    if (Array.isArray(guides)) {
-      guidesMarkup = guides.map((Item, index) => {
-        const key = `guide-${index}`
-
-        if (React.isValidElement(Item)) {
-          return React.cloneElement(Item, {key})
-        }
-
-        return <Guide {...Item} key={key} />
-      })
-    }
-
-    return (
-      <GuideContainer
-        position="absolute"
-        top="0"
-        left="0"
-        width="100%"
-        height="100%"
-        zIndex={999999}
-      >
-        {guidesMarkup}
-        {withCenterGuides && [
-          <Guide
-            top="50%"
-            width="100%"
-            height={1}
-            showValues={false}
-            key="cross1"
-          />,
-          <Guide
-            left="50%"
-            height="100%"
-            width={1}
-            showValues={false}
-            key="cross2"
-          />,
-        ]}
-      </GuideContainer>
-    )
-  }
-
-  getArtboardStyles = () => {
-    const {posX, posY, zoomLevel} = this.state
-
-    return {
-      transform: `scale(${zoomLevel}) translate(${posX}px, ${posY}px)`,
-    }
+    this.props.clearCrosshairSnapshots()
   }
 
   render() {
-    const {alignHorizontally, alignVertically, children} = this.props
-    const {
-      darkMode,
-      showGuides,
-      showBoxInspector,
-      showSizeInspector,
-      isCrosshairActive,
-      isEyeDropperActive,
-      posX,
-      posY,
-      snapshots,
-      showSnapshots,
-      zoomLevel,
-    } = this.state
+    const {darkMode, children} = this.props
 
     return (
       <ThemeProvider theme={{darkMode}}>
-        <GuideProvider showGuide={showGuides}>
-          <ArtboardWrapperUI className={cx('ArtboardWrapper')} {...this.state}>
-            <Crosshair
-              isActive={isCrosshairActive}
-              showSnapshots={showSnapshots}
-              snapshots={snapshots}
-              onSnapshot={this.addSnapshot}
-              posX={posX}
-              posY={posY}
-              zoomLevel={zoomLevel}
-            />
-            <Eyedropper
-              isActive={isEyeDropperActive}
-              onReady={this.readyEyeDropper}
-              onStop={this.stopEyeDropper}
-            />
-            {this.renderToolbar()}
-            <ArtboardUI
-              {...this.state}
-              className={cx('Artboard')}
-              style={this.getArtboardStyles()}
-            >
-              <ContentUI
-                className={cx('ArtboardContent')}
-                {...{
-                  alignHorizontally,
-                  alignVertically,
-                }}
-              >
-                <Resizer
-                  {...this.getResizerProps()}
-                  onResize={this.handleOnResize}
-                >
-                  <BoxInspector showOutlines={showBoxInspector}>
-                    <SizeInspector
-                      showOutlines={showSizeInspector}
-                      zoomLevel={zoomLevel}
-                    >
-                      {children}
-                    </SizeInspector>
-                  </BoxInspector>
-                </Resizer>
-                {this.renderGuides()}
-              </ContentUI>
-            </ArtboardUI>
-            <ZoomWrapperUI>
-              <Zoom
-                onZoomIn={this.zoomIn}
-                onZoomOut={this.zoomOut}
-                zoomLevel={this.state.zoomLevel}
-              />
-            </ZoomWrapperUI>
-            <KeyboardHintsWrapperUI>
-              <KeyboardHints />
-            </KeyboardHintsWrapperUI>
-          </ArtboardWrapperUI>
-        </GuideProvider>
+        <Wrapper>
+          <Crosshair />
+          <Eyedropper />
+          <Toolbar />
+          <Canvas>{children}</Canvas>
+          <ZoomWrapperUI>
+            <Zoom />
+          </ZoomWrapperUI>
+          <KeyboardHintsWrapperUI>
+            <KeyboardHints />
+          </KeyboardHintsWrapperUI>
+        </Wrapper>
       </ThemeProvider>
     )
   }
 }
 
-export default Artboard
+const mapStateToProps = (state, ownProps) => {
+  const {
+    darkMode,
+    isCrosshairActive,
+    isKeyDown,
+    isMoving,
+    isZooming,
+    zoomLevel,
+  } = state
+  const artboardName = ownProps.id || ownProps.name || ''
+
+  return {
+    __initialProps: {...ownProps, artboardName},
+    artboardName,
+    darkMode,
+    isCrosshairActive,
+    isKeyDown,
+    isMoving,
+    isZooming,
+    zoomLevel,
+  }
+}
+
+const mapDispatchToProps = {
+  loadLocalState: actions.loadLocalState,
+  saveLocalState: actions.saveLocalState,
+  onReady: actions.onReady,
+  clearCrosshairSnapshots: actions.clearCrosshairSnapshots,
+  moveStart: actions.moveStart,
+  moveEnd: actions.moveEnd,
+  moveDragStart: actions.moveDragStart,
+  moveDrag: actions.moveDrag,
+  moveDragEnd: actions.moveDragEnd,
+  performActionStart: actions.performActionStart,
+  performActionEnd: actions.performActionEnd,
+  startEyeDropper: actions.startEyeDropper,
+  readyEyeDropper: actions.readyEyeDropper,
+  stopEyeDropper: actions.stopEyeDropper,
+  stopCrosshair: actions.stopCrosshair,
+  toggleCrosshair: actions.toggleCrosshair,
+  toggleBoxInspector: actions.toggleBoxInspector,
+  toggleDarkMode: actions.toggleDarkMode,
+  toggleGuides: actions.toggleGuides,
+  toggleSizeInspector: actions.toggleSizeInspector,
+  zoomIn: actions.zoomIn,
+  zoomOut: actions.zoomOut,
+  zoomInStart: actions.zoomInStart,
+  zoomOutStart: actions.zoomOutStart,
+  zoomReset: actions.zoomReset,
+}
+
+export const ConnectedArtboard = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Artboard)
+
+export default props => {
+  return (
+    <Provider store={store}>
+      <ConnectedArtboard {...props} />
+    </Provider>
+  )
+}

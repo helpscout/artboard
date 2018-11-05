@@ -84,6 +84,13 @@ const ResizerUI = styled('div')`
       position: absolute;
       bottom: 15px;
       right: 15px;
+
+      ${({theme}) =>
+        theme.darkMode &&
+        `
+        border-right: 2px solid rgba(255, 255, 255, 0.2);
+        border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+      `};
     }
   }
 `
