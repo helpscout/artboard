@@ -1,6 +1,6 @@
 {
   "name": "@helpscout/artboard",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A tool kit for React UI development and design",
   "main": "dist/index.js",
   "private": false,
