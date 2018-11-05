@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 import Eyedropper from '../../Eyedropper'
-import {readyEyeDropper, stopEyeDropper} from '../actions'
+import {readyEyeDropper, stopEyeDropper} from '../Artboard.actions'
 
 const mapStateToProps = state => {
   const {isEyeDropperActive} = state

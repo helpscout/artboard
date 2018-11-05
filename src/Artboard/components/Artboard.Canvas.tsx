@@ -1,10 +1,11 @@
 import * as React from 'react'
 import {connect} from 'react-redux'
-import CanvasContent from './Artboard.CanvasContent'
 import BoxInspector from './Artboard.BoxInspector'
+import CanvasContent from './Artboard.CanvasContent'
+import GuideProvider from '../../GuideProvider'
+import Guides from './Artboard.Guides'
 import Resizer from './Artboard.Resizer'
 import SizeInspector from './Artboard.SizeInspector'
-
 import {ArtboardUI} from '../Artboard.css'
 import {cx} from '../../utils/index'
 
@@ -18,31 +19,45 @@ export class Canvas extends React.PureComponent<any> {
   }
 
   render() {
-    const {children, guides, ...rest} = this.props
+    const {children, guides, showGuides, ...rest} = this.props
 
     return (
-      <ArtboardUI {...rest} className={cx('Artboard')} style={this.getStyles()}>
-        <CanvasContent>
-          <Resizer>
-            <BoxInspector>
-              <SizeInspector>{children}</SizeInspector>
-            </BoxInspector>
-          </Resizer>
-          {guides}
-        </CanvasContent>
-      </ArtboardUI>
+      <GuideProvider showGuide={showGuides}>
+        <ArtboardUI
+          {...rest}
+          className={cx('ArtboardCanvas')}
+          style={this.getStyles()}
+        >
+          <CanvasContent>
+            <Resizer>
+              <BoxInspector>
+                <SizeInspector>{children}</SizeInspector>
+              </BoxInspector>
+            </Resizer>
+            <Guides />
+          </CanvasContent>
+        </ArtboardUI>
+      </GuideProvider>
     )
   }
 }
 
 const mapStateToProps = state => {
-  const {isPerformingAction, isMoving, posX, posY, zoomLevel} = state
+  const {
+    isPerformingAction,
+    isMoving,
+    posX,
+    posY,
+    showGuides,
+    zoomLevel,
+  } = state
 
   return {
     isPerformingAction,
     isMoving,
     posX,
     posY,
+    showGuides,
     zoomLevel,
   }
 }

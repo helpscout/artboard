@@ -26,6 +26,7 @@ export interface Props {
 }
 
 export interface State {
+  artboardName: string
   artboardHeight: number
   artboardWidth: number
   darkMode: boolean

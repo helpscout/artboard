@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from '@helpscout/fancy'
-import Base from '../UI/Base'
-import {cx} from '../utils'
+import Base from '../../../UI/Base'
+import {cx} from '../../../utils'
 
 export class Toolbar extends React.PureComponent<any> {
   render() {

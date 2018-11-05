@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from '@helpscout/fancy'
 import {connect} from 'react-redux'
-import {zoomIn, zoomOut} from '../actions'
+import {zoomIn, zoomOut} from '../Artboard.actions'
 import Base from '../../UI/Base'
 import Button from '../../UI/Button'
 import LabelText from '../../UI/LabelText'

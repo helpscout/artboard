@@ -1,6 +1,7 @@
-import ActionTypes from '../Artboard.ActionTypes'
+import ActionTypes from './Artboard.ActionTypes'
 
 export const initialState = {
+  artboardName: '',
   artboardHeight: 400,
   artboardWidth: 400,
   darkMode: false,
@@ -16,6 +17,7 @@ export const initialState = {
   showBoxInspector: false,
   showSizeInspector: false,
   showSnapshots: true,
+  withCenterGuides: true,
   withResponsiveHeight: false,
   withResponsiveWidth: false,
   snapshots: [],
@@ -45,6 +47,12 @@ const reducer = (state = initialState, action) => {
         artboardHeight: null,
         artboardWidth: null,
         ...action.payload.props,
+      }
+
+    case ActionTypes.LOAD_LOCAL_STATE:
+      return {
+        ...state,
+        ...action.payload.state,
       }
 
     case ActionTypes.PERFORM_ACTION_START:
@@ -114,6 +122,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isKeyDown: true,
+        isPerformingAction: true,
         isMoving: 'start',
       }
 

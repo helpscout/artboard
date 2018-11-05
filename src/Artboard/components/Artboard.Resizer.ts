@@ -1,5 +1,5 @@
 import {connect} from 'react-redux'
-import {onResize} from '../actions'
+import {onResize} from '../Artboard.actions'
 import Resizer from '../../Resizer'
 
 const mapStateToProps = state => {
