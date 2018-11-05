@@ -33,7 +33,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = {
-  onResize,
+  onResizeStop: onResize,
 }
 
 export default connect(

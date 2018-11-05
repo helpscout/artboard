@@ -5,6 +5,7 @@ export const initialState = {
   artboardHeight: 400,
   artboardWidth: 400,
   darkMode: false,
+  initialProps: {},
   isPerformingAction: false,
   isCrosshairActive: false,
   isEyeDropperActive: false,
@@ -31,6 +32,7 @@ let _showSizeInspector = initialState.showSizeInspector
 let _zoomLevel = initialState.zoomLevel
 let _posX = initialState.posX
 let _posY = initialState.posY
+let initialProps = {}
 
 const ZOOM_LEVEL_MAX = 32
 const ZOOM_LEVEL_MIN = 0.125
@@ -42,11 +44,12 @@ const reducer = (state = initialState, action) => {
      * GENERAL ACTIONS
      */
     case ActionTypes.ON_READY:
+      initialProps = action.payload.props
       return {
         ...state,
         artboardHeight: null,
         artboardWidth: null,
-        ...action.payload.props,
+        ...initialProps,
       }
 
     case ActionTypes.LOAD_LOCAL_STATE:
@@ -68,7 +71,11 @@ const reducer = (state = initialState, action) => {
       }
 
     case ActionTypes.RESET:
-      return {...initialState, darkMode: state.darkMode}
+      return {
+        ...initialState,
+        ...initialProps,
+        darkMode: state.darkMode,
+      }
 
     case ActionTypes.TOGGLE_DARK_MODE:
       return {

@@ -72,9 +72,12 @@ export const saveLocalState = () => {
   }
 }
 
-export const resetSettings = () => {
+export const resetSettings = initialProps => {
   return {
     type: ActionTypes.RESET,
+    payload: {
+      props: initialProps,
+    },
   }
 }
 

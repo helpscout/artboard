@@ -139,6 +139,7 @@ export const ZoomWrapperUI = styled(GenericToolBarUI)`
 `
 
 export const KeyboardHintsWrapperUI = styled(GenericToolBarUI)`
+  z-index: 2147483637;
   bottom: 10px;
 `
 
