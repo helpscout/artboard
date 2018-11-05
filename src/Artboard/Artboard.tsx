@@ -1,16 +1,14 @@
-import {Props, State, Action} from './Artboard.types'
+import {State, Action} from './Artboard.types'
 import * as React from 'react'
+import {Provider, connect} from 'react-redux'
+import * as actions from './actions'
 import {ThemeProvider} from '@helpscout/fancy'
+import store from './store'
 import KeyboardHints from './Artboard.KeyboardHints'
 import ToolbarButton from './Artboard.ToolbarButton'
 import Toolbar from './Artboard.Toolbar'
 import reducer, {initialState} from './Artboard.reducer'
-import Zoom from './Artboard.Zoom'
-import BoxInspector from '../BoxInspector'
 import Crosshair from '../Crosshair'
-import Eyedropper from '../Eyedropper'
-import SizeInspector from '../SizeInspector'
-import Resizer from '../Resizer'
 import GuideProvider from '../GuideProvider'
 import GuideContainer from '../GuideContainer'
 import Guide from '../Guide'
@@ -20,8 +18,6 @@ import {cx, Keys, isInputNode} from '../utils'
 import {loadSessionState, saveSessionState} from './Artboard.utils'
 import {
   ArtboardWrapperUI,
-  ArtboardUI,
-  ContentUI,
   ZoomWrapperUI,
   KeyboardHintsWrapperUI,
   ToolbarWrapperUI,
@@ -29,8 +25,12 @@ import {
   ToolbarRightUI,
   config,
 } from './Artboard.css'
+// REDUX
+import Canvas from './components/Artboard.Canvas'
+import Eyedropper from './components/Artboard.Eyedropper'
+import Zoom from './components/Artboard.Zoom'
 
-export class Artboard extends React.Component<Props, State> {
+export class Artboard extends React.Component<any, State> {
   static defaultProps = defaultProps
   __bodyBackGroundColor: string | null = null
 
@@ -66,6 +66,7 @@ export class Artboard extends React.Component<Props, State> {
       ...localState,
     }
 
+    props.onReady(props)
     this.state = mergedState
   }
 
@@ -285,47 +286,6 @@ export class Artboard extends React.Component<Props, State> {
     return this.setStateWithReducer({type: ActionTypes.ZOOM_OUT})
   }
 
-  handleOnResize = (event, resizeProps) => {
-    const {height, width} = resizeProps.size
-
-    return this.setStateWithReducer({
-      type: ActionTypes.RESIZE_ARTBOARD,
-      payload: {
-        artboardHeight: height,
-        artboardWidth: width,
-      },
-    })
-  }
-
-  getResizerProps = () => {
-    const {artboardHeight, artboardWidth} = this.state
-    const {
-      defaultWidth,
-      defaultHeight,
-      height,
-      width,
-      minWidth,
-      minHeight,
-      maxWidth,
-      maxHeight,
-      withResponsiveHeight,
-      withResponsiveWidth,
-    } = this.props
-
-    return {
-      defaultWidth,
-      defaultHeight,
-      height: artboardHeight || height,
-      width: artboardWidth || width,
-      minWidth,
-      minHeight,
-      maxWidth,
-      maxHeight,
-      withResponsiveHeight,
-      withResponsiveWidth,
-    }
-  }
-
   toggleGuides = (event?: Event) => {
     event && event.stopPropagation()
     this.setStateWithReducer({type: ActionTypes.TOGGLE_GUIDES})
@@ -333,27 +293,24 @@ export class Artboard extends React.Component<Props, State> {
 
   toggleBoxInspector = (event?: Event) => {
     event && event.stopPropagation()
-    this.setStateWithReducer({type: ActionTypes.TOGGLE_BOX_INSPECTOR})
+    this.props.toggleBoxInspector()
   }
 
   toggleSizeInspector = (event?: Event) => {
     event && event.stopPropagation()
-    this.setStateWithReducer({type: ActionTypes.TOGGLE_SIZE_INSPECTOR})
+    this.props.toggleSizeInspector()
   }
 
   startEyeDropper = () => {
-    this.setStateWithReducer({type: ActionTypes.CROSSHAIR_END})
-    this.setStateWithReducer({type: ActionTypes.EYEDROPPER_START})
+    this.props.startEyeDropper()
   }
 
   readyEyeDropper = () => {
-    this.setStateWithReducer({type: ActionTypes.PERFORM_ACTION_START})
-    this.setStateWithReducer({type: ActionTypes.EYEDROPPER_READY})
+    this.props.readyEyeDropper()
   }
 
   stopEyeDropper = () => {
-    this.setStateWithReducer({type: ActionTypes.PERFORM_ACTION_END})
-    this.setStateWithReducer({type: ActionTypes.EYEDROPPER_STOP})
+    this.props.stopEyeDropper()
   }
 
   toggleCrosshair = (event?: Event) => {
@@ -520,14 +477,11 @@ export class Artboard extends React.Component<Props, State> {
   }
 
   render() {
-    const {alignHorizontally, alignVertically, children} = this.props
+    const {children} = this.props
     const {
       darkMode,
       showGuides,
-      showBoxInspector,
-      showSizeInspector,
       isCrosshairActive,
-      isEyeDropperActive,
       posX,
       posY,
       snapshots,
@@ -548,46 +502,11 @@ export class Artboard extends React.Component<Props, State> {
               posY={posY}
               zoomLevel={zoomLevel}
             />
-            <Eyedropper
-              isActive={isEyeDropperActive}
-              onReady={this.readyEyeDropper}
-              onStop={this.stopEyeDropper}
-            />
+            <Eyedropper />
             {this.renderToolbar()}
-            <ArtboardUI
-              {...this.state}
-              className={cx('Artboard')}
-              style={this.getArtboardStyles()}
-            >
-              <ContentUI
-                className={cx('ArtboardContent')}
-                {...{
-                  alignHorizontally,
-                  alignVertically,
-                }}
-              >
-                <Resizer
-                  {...this.getResizerProps()}
-                  onResize={this.handleOnResize}
-                >
-                  <BoxInspector showOutlines={showBoxInspector}>
-                    <SizeInspector
-                      showOutlines={showSizeInspector}
-                      zoomLevel={zoomLevel}
-                    >
-                      {children}
-                    </SizeInspector>
-                  </BoxInspector>
-                </Resizer>
-                {this.renderGuides()}
-              </ContentUI>
-            </ArtboardUI>
+            <Canvas guides={this.renderGuides()}>{children}</Canvas>
             <ZoomWrapperUI>
-              <Zoom
-                onZoomIn={this.zoomIn}
-                onZoomOut={this.zoomOut}
-                zoomLevel={this.state.zoomLevel}
-              />
+              <Zoom />
             </ZoomWrapperUI>
             <KeyboardHintsWrapperUI>
               <KeyboardHints />
@@ -599,4 +518,22 @@ export class Artboard extends React.Component<Props, State> {
   }
 }
 
-export default Artboard
+export const ConnectedArtboard = connect(
+  null,
+  {
+    onReady: actions.onReady,
+    startEyeDropper: actions.startEyeDropper,
+    readyEyeDropper: actions.readyEyeDropper,
+    stopEyeDropper: actions.stopEyeDropper,
+    toggleBoxInspector: actions.toggleBoxInspector,
+    toggleSizeInspector: actions.toggleSizeInspector,
+  },
+)(Artboard)
+
+export default props => {
+  return (
+    <Provider store={store}>
+      <ConnectedArtboard {...props} />
+    </Provider>
+  )
+}

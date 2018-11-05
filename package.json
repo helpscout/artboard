@@ -72,7 +72,9 @@
     "@types/jest": "^23.3.3",
     "@types/react": "^16.4.14",
     "@types/react-dom": "^16.0.8",
+    "@types/react-redux": "^6.0.9",
     "@types/react-transition-group": "^2.0.14",
+    "@types/redux": "^3.6.0",
     "awesome-typescript-loader": "^4.0.1",
     "check-dependencies": "1.1.0",
     "coveralls": "3.0.0",
@@ -92,7 +94,9 @@
     "@helpscout/react-utils": "^1.0.1",
     "html2canvas": "1.0.0-alpha.12",
     "polished": "^2.3.0",
+    "react-redux": "^5.1.0",
     "react-resizable": "^1.7.5",
+    "redux": "^4.0.1",
     "resize-observer-polyfill": "^1.5.0"
   }
 }
