@@ -18,8 +18,6 @@ const mapStateToProps = state => {
     withResponsiveWidth,
   } = state
 
-  console.log(state)
-
   return {
     defaultWidth,
     defaultHeight,
