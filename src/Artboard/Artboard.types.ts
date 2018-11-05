@@ -16,6 +16,7 @@ export interface Props {
   minWidth?: number
   maxHeight?: number
   maxWidth?: number
+  padding: number
   posX: number
   posY: number
   snapshots: Snapshots

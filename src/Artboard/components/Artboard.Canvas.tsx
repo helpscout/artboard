@@ -6,7 +6,7 @@ import GuideProvider from '../../GuideProvider'
 import Guides from './Artboard.Guides'
 import Resizer from './Artboard.Resizer'
 import SizeInspector from './Artboard.SizeInspector'
-import {ArtboardUI} from '../Artboard.css'
+import {ArtboardUI, ArtboardContentUI, ArtboardBodyUI} from '../Artboard.css'
 import {cx} from '../../utils/index'
 
 export class Canvas extends React.PureComponent<any> {
@@ -19,7 +19,7 @@ export class Canvas extends React.PureComponent<any> {
   }
 
   render() {
-    const {children, guides, showGuides, ...rest} = this.props
+    const {children, guides, padding, showGuides, ...rest} = this.props
 
     return (
       <GuideProvider showGuide={showGuides}>
@@ -30,9 +30,13 @@ export class Canvas extends React.PureComponent<any> {
         >
           <CanvasContent>
             <Resizer>
-              <BoxInspector>
-                <SizeInspector>{children}</SizeInspector>
-              </BoxInspector>
+              <ArtboardContentUI padding={padding}>
+                <ArtboardBodyUI>
+                  <BoxInspector>
+                    <SizeInspector>{children}</SizeInspector>
+                  </BoxInspector>
+                </ArtboardBodyUI>
+              </ArtboardContentUI>
             </Resizer>
             <Guides />
           </CanvasContent>
@@ -46,6 +50,7 @@ const mapStateToProps = state => {
   const {
     isPerformingAction,
     isMoving,
+    padding,
     posX,
     posY,
     showGuides,
@@ -55,6 +60,7 @@ const mapStateToProps = state => {
   return {
     isPerformingAction,
     isMoving,
+    padding,
     posX,
     posY,
     showGuides,

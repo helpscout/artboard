@@ -123,6 +123,14 @@ export const ContentUI = styled(Base)`
   }
 `
 
+export const ArtboardContentUI = styled(Base)(props => ({
+  padding: props.padding,
+}))
+
+export const ArtboardBodyUI = styled(Base)`
+  position: relative;
+`
+
 export const GenericToolBarUI = styled(Base)`
   align-items: center;
   display: flex;

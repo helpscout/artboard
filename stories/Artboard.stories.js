@@ -33,6 +33,22 @@ stories.add('Component', () => (
   </Artboard>
 ))
 
+stories.add('Padding', () => (
+  <Artboard minHeight={193} minWidth={360} padding={50}>
+    <div
+      style={{
+        boxSizing: 'border-box',
+        background: '#eee',
+        padding: 20,
+        minHeight: 193,
+      }}
+    >
+      <OptionTileGuides />
+      <OptionTile />
+    </div>
+  </Artboard>
+))
+
 stories.add('Empty', () => <Artboard />)
 
 stories.add('Local Storage', () => (

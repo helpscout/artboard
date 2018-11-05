@@ -8,6 +8,7 @@ export const defaultProps = {
   darkMode: false,
   defaultHeight: 400,
   defaultWidth: 400,
+  padding: 0,
   posX: 0,
   posY: 0,
   showGuides: true,

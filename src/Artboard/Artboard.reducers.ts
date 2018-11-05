@@ -18,6 +18,7 @@ export const initialState = {
   minHeight: undefined,
   maxWidth: undefined,
   maxHeight: undefined,
+  padding: 0,
   posX: 0,
   posY: 0,
   showGuides: true,
