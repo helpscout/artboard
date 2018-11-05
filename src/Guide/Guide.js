@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import styled from '@helpscout/fancy'
 import classNames from '@helpscout/react-utils/dist/classNames'
 import ResizeObserver from 'resize-observer-polyfill'
@@ -8,17 +8,7 @@ import {rgba} from 'polished'
 import {cx, getPreparedProps} from '../utils'
 import {defaultProps} from './Guide.utils'
 
-type Observable = {
-  observe: (node: HTMLElement) => void
-  unobserve: (node: HTMLElement) => void
-}
-
-export interface State {
-  height: number
-  width: number
-}
-
-class Guide extends React.PureComponent<any, State> {
+class Guide extends React.PureComponent {
   static defaultProps = defaultProps
 
   node: HTMLElement
