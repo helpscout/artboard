@@ -14,29 +14,24 @@ export class Line extends React.PureComponent<any> {
     y: 0,
   }
 
+  node: HTMLElement
+  labelNode: HTMLElement
+
+  componentDidMount() {
+    this.updateNodeStylesFromProps(this.props)
+  }
+
+  shouldComponentUpdate(nextProps) {
+    this.updateNodeStylesFromProps(nextProps)
+    return false
+  }
+
   isX = () => {
     return this.props.coordinate === 'x'
   }
 
-  getComponent = () => {
-    return this.isX() ? LineXUI : LineYUI
-  }
-
-  getValue = (): number => {
-    const values = getValueFromProps(this.props)
-    let value
-
-    if (this.isX()) {
-      value = values.x
-    } else {
-      value = values.y
-    }
-
-    return value
-  }
-
-  getStyles = () => {
-    const values = getValueFromProps(this.props)
+  updateNodeStylesFromProps = props => {
+    const values = getValueFromProps(props)
     let value
 
     if (this.isX()) {
@@ -49,21 +44,28 @@ export class Line extends React.PureComponent<any> {
       ? `translateY(${value}px)`
       : `translateX(${value}px)`
 
-    return {
-      transform,
-    }
+    this.node.style.transform = transform
   }
+
+  // Disabled for now (For performance reasons)
+  updateLabelValue = value => {
+    this.labelNode.innerHTML = `${value}px`
+  }
+
+  getComponent = () => {
+    return this.isX() ? LineXUI : LineYUI
+  }
+
+  setNodeRef = node => (this.node = node)
+  setLabelNodeRef = node => (this.labelNode = node)
 
   render() {
     const {className, color, opacity} = this.props
     const Component = this.getComponent()
 
     return (
-      <Component {...{className, color, opacity}} style={this.getStyles()}>
-        <LabelUI>
-          {this.getValue()}
-          px
-        </LabelUI>
+      <Component {...{className, color, opacity}} innerRef={this.setNodeRef}>
+        <LabelUI innerRef={this.setLabelNodeRef} />
       </Component>
     )
   }

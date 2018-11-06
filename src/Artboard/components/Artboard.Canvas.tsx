@@ -2,41 +2,70 @@ import * as React from 'react'
 import {connect} from 'react-redux'
 import BoxInspector from './Artboard.BoxInspector'
 import CanvasContent from './Artboard.CanvasContent'
-import GuideProvider from '../../GuideProvider'
+import Content from './Artboard.Content'
+import GuideProvider from './Artboard.GuideProvider'
 import Guides from './Artboard.Guides'
 import Resizer from './Artboard.Resizer'
 import SizeInspector from './Artboard.SizeInspector'
-import {ArtboardUI, ArtboardContentUI, ArtboardBodyUI} from '../Artboard.css'
+import {ArtboardUI, ArtboardBodyUI} from '../Artboard.css'
 import {cx} from '../../utils/index'
 
 export class Canvas extends React.PureComponent<any> {
-  getStyles = () => {
-    const {posX, posY, zoomLevel} = this.props
+  node: HTMLElement
 
-    return {
-      transform: `scale(${zoomLevel}) translate(${posX}px, ${posY}px)`,
-    }
+  componentDidMount() {
+    this.updateNodeStylesFromProps(this.props)
   }
 
+  shouldComponentUpdate(nextProps) {
+    // Performantly re-render the UI
+    this.updateNodeStylesFromProps(nextProps)
+
+    if (nextProps.isPerformingAction !== this.props.isPerformingAction) {
+      return true
+    }
+    if (nextProps.children !== this.props.children) {
+      return true
+    }
+
+    return false
+  }
+
+  updateNodeStylesFromProps = nextProps => {
+    const {isMoving, posX, posY, zoomLevel} = nextProps
+
+    if (!this.node) return
+
+    let transition = 'background 200ms linear, transform 200ms ease'
+    if (isMoving) {
+      transition = 'none'
+    }
+
+    this.node.style.transform = `scale(${zoomLevel}) translate(${posX}px, ${posY}px)`
+    this.node.style.transition = transition
+  }
+
+  setNodeRef = node => (this.node = node)
+
   render() {
-    const {children, guides, padding, showGuides, ...rest} = this.props
+    const {children, isPerformingAction} = this.props
 
     return (
-      <GuideProvider showGuide={showGuides}>
+      <GuideProvider>
         <ArtboardUI
-          {...rest}
           className={cx('ArtboardCanvas')}
-          style={this.getStyles()}
+          innerRef={this.setNodeRef}
+          isPerformingAction={isPerformingAction}
         >
           <CanvasContent>
             <Resizer>
-              <ArtboardContentUI padding={padding}>
+              <Content>
                 <ArtboardBodyUI>
                   <BoxInspector>
                     <SizeInspector>{children}</SizeInspector>
                   </BoxInspector>
                 </ArtboardBodyUI>
-              </ArtboardContentUI>
+              </Content>
             </Resizer>
             <Guides />
           </CanvasContent>
@@ -47,23 +76,13 @@ export class Canvas extends React.PureComponent<any> {
 }
 
 const mapStateToProps = state => {
-  const {
-    isPerformingAction,
-    isMoving,
-    padding,
-    posX,
-    posY,
-    showGuides,
-    zoomLevel,
-  } = state
+  const {isPerformingAction, isMoving, posX, posY, zoomLevel} = state
 
   return {
     isPerformingAction,
     isMoving,
-    padding,
     posX,
     posY,
-    showGuides,
     zoomLevel,
   }
 }

@@ -8,13 +8,13 @@ export class KeyboardHints extends React.PureComponent<any> {
       <KeyboardHintsUI>
         <KeyboardHintsActionsUI>
           <div>
-            <strong>Alt+D</strong>: Dark Mode
+            <strong>⌥+D</strong>: Dark Mode
           </div>
           <div>
             <strong>Z</strong>: Zoom In
           </div>
           <div>
-            <strong>Alt+Z</strong>: Zoom Out
+            <strong>⌥+Z</strong>: Zoom Out
           </div>
           <div>
             <strong>Space</strong>: Drag
@@ -32,7 +32,7 @@ export class KeyboardHints extends React.PureComponent<any> {
             <strong>X</strong>: Crosshair
           </div>
           <div>
-            <strong>Backspace</strong>: Clear Crosshairs
+            <strong>⌫</strong>: Clear Crosshairs
           </div>
         </KeyboardHintsActionsUI>
       </KeyboardHintsUI>
@@ -47,17 +47,26 @@ const KeyboardHintsUI = styled(Base)`
   justify-content: center;
   flex-direction: column;
   opacity: 0.3;
-  pointer-events: none;
+  position: absolute;
+  left: 10px;
+  bottom: 0;
+  pointer-events: auto;
   transform: translateZ(0);
 `
 
 const KeyboardHintsActionsUI = styled(Base)`
-  align-items: center;
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
   font-size: 10px;
   justify-content: center;
   margin-bottom: 5px;
+  opacity: 0.5;
+  transition: opacity 200ms linear;
+
+  &:hover {
+    opacity: 1;
+  }
 
   * {
     margin: 3px 5px;

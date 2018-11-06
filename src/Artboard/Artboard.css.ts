@@ -77,12 +77,6 @@ export const ArtboardUI = styled(Base)`
       user-select: none !important;
     }
   `};
-
-  ${({isMoving}) =>
-    isMoving &&
-    `
-    transition: none;
-  `};
 `
 
 export const ContentUI = styled(Base)`

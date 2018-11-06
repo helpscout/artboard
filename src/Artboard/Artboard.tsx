@@ -47,10 +47,12 @@ export class Artboard extends React.Component<any> {
     this.props.saveLocalState()
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) {
+  shouldComponentUpdate(nextProps) {
+    if (nextProps !== this.props) {
       this.props.saveLocalState()
     }
+    if (nextProps.darkMode !== this.props.darkMode) return true
+    return false
   }
 
   getArtboardNameFromProps = props => {

@@ -14,14 +14,15 @@ export class ArtboardGuides extends React.Component<any> {
     let guidesMarkup = guides
 
     if (Array.isArray(guides)) {
-      guidesMarkup = guides.map((Item, index) => {
+      guidesMarkup = guides.map((item, index) => {
         const key = `guide-${index}`
+        let props = item.props ? item.props : item
 
-        if (React.isValidElement(Item)) {
-          return React.cloneElement(Item, {key})
+        if (typeof item === 'object') {
+          return <Guide {...props} key={key} />
         }
 
-        return <Guide {...Item} key={key} />
+        return null
       })
     }
 

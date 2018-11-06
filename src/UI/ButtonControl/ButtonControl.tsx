@@ -41,6 +41,7 @@ const ButtonWrapperUI = styled('div')`
 
 const LabelUI = styled('label')`
   display: block;
+  line-height: 1;
   margin: 0;
   padding: 0;
   text-align: center;
