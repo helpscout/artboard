@@ -14,7 +14,6 @@ export const ArtboardWrapperUI = styled(Base)`
   background-color: ${config.backgroundColor};
   box-sizing: border-box;
   bottom: 0;
-  color: ${config.color};
   display: flex;
   justify-content: center;
   left: 0;
@@ -127,6 +126,7 @@ export const ArtboardBodyUI = styled(Base)`
 
 export const GenericToolBarUI = styled(Base)`
   align-items: center;
+  color: ${config.color};
   display: flex;
   justify-content: center;
   position: fixed;
@@ -134,6 +134,12 @@ export const GenericToolBarUI = styled(Base)`
   transform: translateZ(0);
   width: 100%;
   z-index: 2147483647;
+
+  ${({theme}) =>
+    theme.darkMode &&
+    `
+    color: ${config.colorDark};
+  `};
 `
 
 export const ZoomWrapperUI = styled(GenericToolBarUI)`
