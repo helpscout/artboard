@@ -12,6 +12,7 @@ export const config = {
 export const ArtboardWrapperUI = styled(Base)`
   align-items: center;
   background-color: ${config.backgroundColor};
+  color: ${config.color};
   box-sizing: border-box;
   bottom: 0;
   display: flex;
@@ -27,7 +28,6 @@ export const ArtboardWrapperUI = styled(Base)`
     theme.darkMode &&
     `
     background-color: ${config.backgroundColorDark};
-    color: ${config.colorDark};
   `};
 
   ${({isZooming}) => {
