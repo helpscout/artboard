@@ -10,9 +10,7 @@ const stories = storiesOf('Artboard', module)
 stories.add('Simple', () => (
   <Artboard withResponsiveWidth>
     <div style={{background: '#eee', textAlign: 'center'}}>
-      <Button version={2} kind="primary" size="lg">
-        Button
-      </Button>
+      <h1>Artboard</h1>
     </div>
   </Artboard>
 ))

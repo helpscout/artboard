@@ -9,10 +9,10 @@ export const config = {
   colorDark: '#fff',
 }
 
-export const ArtboardWrapperUI = styled(Base)`
+export const ArtboardWrapperUI = styled('div')`
   align-items: center;
   background-color: ${config.backgroundColor};
-  color: ${config.color};
+  box-sizing: border-box;
   box-sizing: border-box;
   bottom: 0;
   display: flex;
@@ -51,7 +51,7 @@ export const ArtboardWrapperUI = styled(Base)`
   }};
 `
 
-export const ArtboardUI = styled(Base)`
+export const ArtboardUI = styled('div')`
   background: white;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.2),
     0 12px 40px rgba(0, 0, 0, 0.2);
@@ -78,7 +78,8 @@ export const ArtboardUI = styled(Base)`
   `};
 `
 
-export const ContentUI = styled(Base)`
+export const ContentUI = styled('div')`
+  box-sizing: border-box;
   display: flex;
   min-width: 0;
   min-height: 0;
@@ -116,11 +117,13 @@ export const ContentUI = styled(Base)`
   }
 `
 
-export const ArtboardContentUI = styled(Base)(props => ({
+export const ArtboardContentUI = styled('div')(props => ({
+  boxSizing: 'border-box',
   padding: props.padding,
 }))
 
-export const ArtboardBodyUI = styled(Base)`
+export const ArtboardBodyUI = styled('div')`
+  box-sizing: border-box;
   position: relative;
 `
 
