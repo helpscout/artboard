@@ -3,10 +3,11 @@ import {ArtboardWrapperUI} from '../Artboard.css'
 import {cx} from '../../utils'
 
 const mapStateToProps = state => {
-  const {isMoving, isZooming} = state
+  const {id, isMoving, isZooming} = state
 
   return {
     className: cx('ArtboardWrapper'),
+    id,
     isMoving,
     isZooming,
   }

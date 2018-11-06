@@ -155,6 +155,7 @@ stories.add('Guides (Component + Objects)', () => (
 
 stories.add('Without center guides', () => (
   <Artboard
+    name="center-guides"
     withResponsiveWidth
     withCenterGuides={false}
     guides={[
