@@ -96,8 +96,6 @@ const ResizerUI = styled('div')`
 `
 
 const ContentUI = styled('div')`
-  position: relative;
-
   ${({withResponsiveHeight}) =>
     withResponsiveHeight &&
     `

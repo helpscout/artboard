@@ -94,6 +94,7 @@
     "@helpscout/react-utils": "^1.0.1",
     "html2canvas": "1.0.0-alpha.12",
     "polished": "^2.3.0",
+    "react-draggable": "^3.0.5",
     "react-redux": "^5.1.0",
     "react-resizable": "^1.7.5",
     "redux": "^4.0.1",

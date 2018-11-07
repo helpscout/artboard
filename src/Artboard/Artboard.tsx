@@ -257,7 +257,7 @@ export class Artboard extends React.Component<any> {
   }
 
   render() {
-    const {darkMode, children} = this.props
+    const {darkMode, children, layers} = this.props
 
     return (
       <ThemeProvider theme={{darkMode}}>
@@ -265,7 +265,7 @@ export class Artboard extends React.Component<any> {
           <Crosshair />
           <Eyedropper />
           <Toolbar />
-          <Canvas>{children}</Canvas>
+          <Canvas layers={layers}>{children}</Canvas>
           <ZoomWrapperUI>
             <Zoom />
           </ZoomWrapperUI>

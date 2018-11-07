@@ -19,7 +19,7 @@ export class Canvas extends React.PureComponent<any> {
   }
 
   render() {
-    const {children, guides, padding, showGuides, ...rest} = this.props
+    const {children, guides, layers, padding, showGuides, ...rest} = this.props
 
     return (
       <GuideProvider showGuide={showGuides}>
@@ -32,6 +32,7 @@ export class Canvas extends React.PureComponent<any> {
             <Resizer>
               <ArtboardContentUI padding={padding}>
                 <ArtboardBodyUI>
+                  {layers}
                   <BoxInspector>
                     <SizeInspector>{children}</SizeInspector>
                   </BoxInspector>
@@ -46,7 +47,7 @@ export class Canvas extends React.PureComponent<any> {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
   const {
     isPerformingAction,
     isMoving,
@@ -65,6 +66,7 @@ const mapStateToProps = state => {
     posY,
     showGuides,
     zoomLevel,
+    layers: ownProps.layers,
   }
 }
 
