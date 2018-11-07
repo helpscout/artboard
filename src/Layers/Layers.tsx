@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as r from './img.png'
+import img from './img.png'
 import Draggable from 'react-draggable'
 import styled from '@helpscout/fancy'
 
@@ -169,7 +169,7 @@ class Layers extends React.PureComponent {
         <LayerUI {...this.state} style={this.getLayerStyles()}>
           <Draggable>
             <ContentUI show={this.state.show}>
-              <ImageUI src={r} width={400} />
+              <ImageUI src={img} width={400} />
             </ContentUI>
           </Draggable>
         </LayerUI>
