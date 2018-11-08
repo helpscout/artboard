@@ -1,5 +1,5 @@
 import * as React from 'react'
-import OptionTile from '@helpscout/blue/components/OptionTile'
+import OptionTile from '@helpscout/hsds-react/components/OptionTile'
 import GuideContainer from '../../src/GuideContainer'
 import Guide from '../../src/Guide'
 

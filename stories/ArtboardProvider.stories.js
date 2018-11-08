@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {storiesOf} from '@storybook/react'
-import Button from '@helpscout/blue/components/Button'
+import Button from '@helpscout/hsds-react/components/Button'
 import Artboard from '../src/Artboard'
 import ArtboardProvider from '../src/ArtboardProvider'
 import Guide from '../src/Guide'

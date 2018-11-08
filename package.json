@@ -61,7 +61,7 @@
     "react": "^16 || ^15"
   },
   "devDependencies": {
-    "@helpscout/blue": "^1.9.3",
+    "@helpscout/hsds-react": "^2.0.0",
     "@helpscout/zero": "^0.0.9",
     "@storybook/addon-actions": "^3.4.3",
     "@storybook/addon-links": "^3.4.3",
