@@ -145,6 +145,11 @@ export const GenericToolBarUI = styled(Base)`
   `};
 `
 
+export const InterfaceWrapperUI = styled('div')`
+  position: static;
+  width: 100%;
+`
+
 export const ZoomWrapperUI = styled(GenericToolBarUI)`
   bottom: 40px;
 `

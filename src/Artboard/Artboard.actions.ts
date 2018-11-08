@@ -102,6 +102,14 @@ export const toggleDarkMode = () => {
 }
 
 /**
+ * INTERFACE
+ */
+
+export const toggleInterface = () => {
+  return {type: ActionTypes.TOGGLE_INTERFACE}
+}
+
+/**
  * GUIDES
  */
 

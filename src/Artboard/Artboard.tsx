@@ -52,6 +52,7 @@ export class Artboard extends React.Component<any> {
       this.props.saveLocalState()
     }
     if (nextProps.darkMode !== this.props.darkMode) return true
+    if (nextProps.showInterface !== this.props.showInterface) return true
     return false
   }
 
@@ -104,6 +105,11 @@ export class Artboard extends React.Component<any> {
       case Keys.SPACE:
         this.stopCrosshair()
         this.prepareMove()
+        break
+      case Keys.PERIOD:
+        if (event.metaKey || event.ctrlKey) {
+          this.toggleInterface()
+        }
         break
       default:
         break
@@ -188,6 +194,10 @@ export class Artboard extends React.Component<any> {
     this.props.toggleDarkMode()
   }
 
+  toggleInterface = () => {
+    this.props.toggleInterface()
+  }
+
   prepareZoomIn = () => {
     if (this.props.isKeyDown && this.props.isZooming === 'in') return
 
@@ -259,18 +269,16 @@ export class Artboard extends React.Component<any> {
   }
 
   render() {
-    const {darkMode, children} = this.props
+    const {darkMode, children, showInterface} = this.props
 
     return (
       <ThemeProvider theme={{darkMode}}>
         <Wrapper>
           <Crosshair />
           <Eyedropper />
-          <Toolbar />
+          {showInterface && <Toolbar />}
           <Canvas>{children}</Canvas>
-          <ZoomWrapperUI>
-            <Zoom />
-          </ZoomWrapperUI>
+          <ZoomWrapperUI>{showInterface && <Zoom />}</ZoomWrapperUI>
           <KeyboardHintsWrapperUI>
             <KeyboardHints />
           </KeyboardHintsWrapperUI>
@@ -287,6 +295,7 @@ const mapStateToProps = (state, ownProps) => {
     isKeyDown,
     isMoving,
     isZooming,
+    showInterface,
     zoomLevel,
   } = state
   const artboardName = ownProps.id || ownProps.name || ''
@@ -299,6 +308,7 @@ const mapStateToProps = (state, ownProps) => {
     isKeyDown,
     isMoving,
     isZooming,
+    showInterface,
     zoomLevel,
   }
 }
@@ -322,6 +332,7 @@ const mapDispatchToProps = {
   toggleCrosshair: actions.toggleCrosshair,
   toggleBoxInspector: actions.toggleBoxInspector,
   toggleDarkMode: actions.toggleDarkMode,
+  toggleInterface: actions.toggleInterface,
   toggleGuides: actions.toggleGuides,
   toggleSizeInspector: actions.toggleSizeInspector,
   zoomIn: actions.zoomIn,

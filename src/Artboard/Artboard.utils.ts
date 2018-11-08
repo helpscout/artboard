@@ -13,6 +13,7 @@ export const defaultProps = {
   posY: 0,
   showGuides: true,
   showBoxInspector: false,
+  showInterface: true,
   snapshots: [],
   withCenterGuides: true,
   withResponsiveHeight: false,

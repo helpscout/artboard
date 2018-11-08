@@ -26,6 +26,7 @@ export const initialState = {
   posY: 0,
   showGuides: true,
   showBoxInspector: false,
+  showInterface: true,
   showSizeInspector: false,
   showSnapshots: true,
   withCenterGuides: true,
@@ -91,6 +92,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         darkMode: !state.darkMode,
+      }
+
+    case ActionTypes.TOGGLE_INTERFACE:
+      return {
+        ...state,
+        showInterface: !state.showInterface,
       }
 
     /**

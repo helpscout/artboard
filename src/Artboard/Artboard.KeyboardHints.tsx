@@ -34,6 +34,9 @@ export class KeyboardHints extends React.PureComponent<any> {
           <div>
             <strong>⌫</strong>: Clear Crosshairs
           </div>
+          <div>
+            <strong>⌘+.</strong>: Toggle Interface
+          </div>
         </KeyboardHintsActionsUI>
       </KeyboardHintsUI>
     )

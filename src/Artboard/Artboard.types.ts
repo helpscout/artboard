@@ -19,6 +19,7 @@ export interface Props {
   padding: number
   posX: number
   posY: number
+  showInterface: boolean
   snapshots: Snapshots
   withResponsiveHeight: boolean
   withResponsiveWidth: boolean
@@ -40,6 +41,7 @@ export interface State {
   isZooming: 'in' | 'out' | undefined
   showGuides: boolean
   showBoxInspector: boolean
+  showInterface: boolean
   showSizeInspector: boolean
   showSnapshots: boolean
   snapshots: Snapshots

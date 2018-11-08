@@ -14,6 +14,7 @@ export const Keys = {
   SPACE: 32,
   ESC: 27,
   BACKSPACE: 8,
+  PERIOD: 190,
 }
 
 export function noop() {
