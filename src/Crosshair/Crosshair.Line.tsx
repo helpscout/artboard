@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from '@helpscout/fancy'
 
-export class Line extends React.PureComponent<any> {
+export class Line extends React.Component<any> {
   static defaultProps = {
     centerCoords: {x: 0, y: 0},
     color: 'cyan',

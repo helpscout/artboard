@@ -10,7 +10,7 @@ import SizeInspector from './Artboard.SizeInspector'
 import {ArtboardUI, ArtboardBodyUI} from '../Artboard.css'
 import {cx} from '../../utils/index'
 
-export class Canvas extends React.PureComponent<any> {
+export class Canvas extends React.Component<any> {
   node: HTMLElement
 
   componentDidMount() {

@@ -191,3 +191,17 @@ stories.add('Dark Mode', () => (
     </div>
   </Artboard>
 ))
+
+stories.add('Size', () => (
+  <Artboard
+    name="artboard-size"
+    withResponsiveWidth
+    withCenterGuides={false}
+    artboardWidth={480}
+    artboardHeight={300}
+  >
+    <div style={{background: '#eee', textAlign: 'center'}}>
+      <h1>Artboard</h1>
+    </div>
+  </Artboard>
+))

@@ -19,8 +19,8 @@ const mapStateToProps = state => {
   } = state
 
   return {
-    defaultWidth,
-    defaultHeight,
+    defaultWidth: artboardWidth || defaultWidth,
+    defaultHeight: artboardHeight || defaultHeight,
     height: artboardHeight || height,
     width: artboardWidth || width,
     minWidth,
