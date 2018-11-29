@@ -24,31 +24,8 @@ export const loadLocalState = props => {
   const artboardName = getArtboardNameFromProps(props)
   const localState = loadSessionState(artboardName)
 
-  const {
-    darkMode,
-    posX,
-    posY,
-    showGuides,
-    showBoxInspector,
-    width,
-    height,
-    snapshots,
-    zoomLevel,
-  } = props
-
-  const mergedState = {
-    ...state,
-    darkMode,
-    posX,
-    posY,
-    showGuides,
-    showBoxInspector,
-    snapshots,
-    zoomLevel,
-    artboardHeight: height,
-    artboardWidth: width,
-    ...localState,
-  }
+  let mergedState = mergeStateWithProps(state, props)
+  mergedState = mergeStateWithProps(mergedState, localState)
 
   return {
     type: ActionTypes.LOAD_LOCAL_STATE,
@@ -260,4 +237,11 @@ export const mergePropsWithState = (props, state): Object => {
   })
 
   return nextState
+}
+
+export const mergeStateWithProps = (state, props): Object => {
+  return Object.keys(state).reduce((acc, key) => {
+    const value = props[key] !== undefined ? props[key] : state[key]
+    return {...acc, [key]: value}
+  }, {})
 }
