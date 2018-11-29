@@ -9,7 +9,7 @@
     "prestart": "npm run check:npm",
     "build:js": "zero build",
     "build:ts": "tsc",
-    "build": "npm run build:js && npm run build:ts",
+    "build": "npm run clean && npm run build:js && npm run build:ts",
     "bundle": "zero build --bundle",
     "lint": "zero lint",
     "dev": "zero test --watchAll",
