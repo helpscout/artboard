@@ -51,9 +51,7 @@ export class Artboard extends React.Component<any> {
     if (nextProps !== this.props) {
       this.props.saveLocalState()
     }
-    if (nextProps.darkMode !== this.props.darkMode) return true
-    if (nextProps.showInterface !== this.props.showInterface) return true
-    return false
+    return true
   }
 
   getArtboardNameFromProps = props => {
@@ -259,9 +257,7 @@ export class Artboard extends React.Component<any> {
   }
 
   stopCrosshair = () => {
-    if (this.props.isCrosshairActive) {
-      this.props.stopCrosshair()
-    }
+    this.props.stopCrosshair()
   }
 
   clearSnapshots = () => {
@@ -289,27 +285,17 @@ export class Artboard extends React.Component<any> {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const {
-    darkMode,
-    isCrosshairActive,
-    isKeyDown,
-    isMoving,
-    isZooming,
-    showInterface,
-    zoomLevel,
-  } = state
+  const {darkMode, isKeyDown, isMoving, isZooming, showInterface} = state
   const artboardName = ownProps.id || ownProps.name || ''
 
   return {
     __initialProps: {...ownProps, artboardName},
     artboardName,
     darkMode,
-    isCrosshairActive,
     isKeyDown,
     isMoving,
     isZooming,
     showInterface,
-    zoomLevel,
   }
 }
 

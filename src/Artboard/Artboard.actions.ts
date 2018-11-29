@@ -134,6 +134,13 @@ export const startCrosshair = () => {
 }
 
 export const stopCrosshair = () => {
+  const state = store.getState()
+  if (!state.isCrosshairActive) {
+    return {
+      type: ActionTypes.NULL,
+    }
+  }
+
   return {type: ActionTypes.CROSSHAIR_END}
 }
 
