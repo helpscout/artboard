@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {mount} from 'enzyme'
-import ButtonControl from './index'
-import {getStyle} from '../../testHelpers'
+import ButtonControl from '../index'
+import {getStyle} from '../../../testHelpers'
 
 describe('Children', () => {
   test('Can render content', () => {

@@ -11,5 +11,6 @@ export {default as GuideContext} from './GuideContext'
 export {default as GuideProvider} from './GuideProvider'
 export {default as Resizer} from './Resizer'
 export {default as SizeInspector} from './SizeInspector'
+export {default as withArtboard} from './withArtboard'
 
 export default Artboard

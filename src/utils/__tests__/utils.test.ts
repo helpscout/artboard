@@ -4,7 +4,7 @@ import {
   toCSSNumberValue,
   cx,
   isInputNode,
-} from './index'
+} from '../index'
 
 describe('noop', () => {
   test('Returns undefined', () => {

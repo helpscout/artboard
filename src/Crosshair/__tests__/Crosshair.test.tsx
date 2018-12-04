@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {mount} from 'enzyme'
-import Crosshair from './index'
+import Crosshair from '../index'
 
 describe('Render', () => {
   test('Can render component', () => {

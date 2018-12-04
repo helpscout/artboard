@@ -12,20 +12,20 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [🔧 Installation](#-installation)
-- [🕹 Usage](#%F0%9F%95%B9-usage)
+- [Installation](#installation)
+- [Usage](#usage)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 Project is still under development!
 
-## 🔧 Installation
+## Installation
 
 ```text
 npm install --save-dev @helpscout/artboard
 ```
 
-## 🕹 Usage
+## Usage
 
 Here's an example Storybook story with Artboard!
 
