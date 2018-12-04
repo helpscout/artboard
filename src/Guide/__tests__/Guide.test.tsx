@@ -1,9 +1,9 @@
 import * as React from 'react'
 import {mount} from 'enzyme'
-import Guide from './index'
-import GuideProvider from '../GuideProvider'
-import {dotcx} from '../utils/index'
-import {findOne, getStyle} from '../testHelpers'
+import Guide from '../index'
+import GuideProvider from '../../GuideProvider/index'
+import {dotcx} from '../../utils/index'
+import {findOne, getStyle} from '../../testHelpers'
 
 describe('Width/Height', () => {
   test('Renders with the specified width/height', () => {

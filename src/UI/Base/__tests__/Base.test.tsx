@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {mount} from 'enzyme'
-import Base from './Base'
-import {getStyle} from '../../testHelpers'
+import Base from '../Base'
+import {getStyle} from '../../../testHelpers'
 
 describe('Base', () => {
   test('Renders a div with default styles', () => {

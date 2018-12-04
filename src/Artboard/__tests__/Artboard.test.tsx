@@ -1,9 +1,9 @@
 import * as React from 'react'
 import {mount} from 'enzyme'
-import BoxInspector from './index'
+import Artboard from '../index'
 
 describe('Render', () => {
   test('Can render component', () => {
-    expect(mount(<BoxInspector />)).toBeTruthy()
+    expect(mount(<Artboard />)).toBeTruthy()
   })
 })

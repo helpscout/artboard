@@ -1,9 +1,9 @@
 import * as React from 'react'
 import {mount} from 'enzyme'
-import GuideContainer from './index'
-import Guide from '../Guide'
-import {dotcx} from '../utils/index'
-import {findOne, getStyle} from '../testHelpers'
+import GuideContainer from '../index'
+import Guide from '../../Guide/index'
+import {dotcx} from '../../utils/index'
+import {findOne, getStyle} from '../../testHelpers'
 
 describe('Styles', () => {
   test('Renders CSS-based props as CSS styles', () => {
